@@ -19,7 +19,7 @@ A static, single-page website for All Things Printed. It is plain HTML, CSS and 
 ## Business details on the site
 
 - Phone: (514) 815-1829 · Email: info@allthingsprinted.ca (also where the quote form sends) · Website: www.allthingsprinted.ca
-- Instagram: @allthingsprinted · Hours: Monday to Saturday, 9 a.m. to 5 p.m. · Service area: Greater Montreal
+- Instagram: @allthingsprintedinc · Hours: Monday to Saturday, 9 a.m. to 5 p.m. · Service area: Greater Montreal
 - Turnaround 10–15 business days · Vector files print-ready, other files adjusted for a fee · Visual mockups included, sent once the quote is approved · 50% deposit, 50% on completion · Delivery fees may apply
 
 These also appear in the structured data (`<script type="application/ld+json">`) in the `<head>` of both pages, which Google reads. Update them there too if they change.
