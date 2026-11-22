@@ -1,6 +1,6 @@
 # All Things Printed — website
 
-A static, single-page website for All Things Printed. It is plain HTML, CSS and JavaScript with no build step, so GitHub Pages can publish it as-is.
+A simple static website for All Things Printed: plain HTML, CSS and a little JavaScript, no build step. French is the main page; English is at `/en/`.
 
 ## Files
 
@@ -8,67 +8,60 @@ A static, single-page website for All Things Printed. It is plain HTML, CSS and 
 |------|------------|
 | `index.html` | **French page (main page)** at `/` |
 | `en/index.html` | English page at `/en/` |
-| `css/styles.css` | Styling. Brand colours are at the top under `:root` |
-| `js/main.js` | Mobile menu, hero animation and the quote form (messages in French or English, based on the page language) |
-| `assets/images/` | Logo files (PNG and WebP), favicon, social sharing image (`og-image.jpg`) |
 | `confidentialite.html`, `en/privacy.html` | Privacy policy (French, English) |
-| `worker/index.js`, `wrangler.toml` | Cloudflare Worker: serves the site and handles the online quote form |
-| `tests/` | Tests for the Worker (`npm test`) |
+| `css/styles.css` | Styling. Brand colours are at the top under `:root` |
+| `js/main.js` | Mobile menu, hero animation, cookie notice and the lead form |
+| `assets/images/` | Logo files (PNG and WebP), favicon, social sharing image (`og-image.jpg`) |
 | `assets/fonts/` | Self-hosted Archivo font (open licence in `OFL.txt`) |
 | `robots.txt`, `sitemap.xml` | Help search engines find both language versions |
-| `.nojekyll` | Tells GitHub Pages to serve the files as-is |
+| `wrangler.toml`, `.assetsignore` | Publishing on Cloudflare (see below) |
 
 **Any text change must be made in both `index.html` (French) and `en/index.html` (English).**
 
+## Page sections
+
+Hero (T-shirt with a "( VOTRE LOGO ICI )" print area) → Services → Garments → About → FAQ → Contact and lead form.
+
 ## Business details on the site
 
-- Phone: (514) 815-1829 · Email: info@allthingsprinted.ca (also where the quote form sends) · Website: www.allthingsprinted.ca
+- Phone: (514) 815-1829 · Email: info@allthingsprinted.ca · Website: www.allthingsprinted.ca
 - Instagram: @allthingsprintedinc · Hours: Monday to Saturday, 9 a.m. to 5 p.m. · Service area: Greater Montreal
-- Turnaround 10–15 business days · Vector files print-ready, other files adjusted for a fee · Visual mockups included, sent once the quote is approved · 50% deposit, 50% on completion · Delivery fees may apply
+- FAQ: turnaround 10–15 business days · vector files print-ready, other files adjusted for a fee · visual mockup included, sent once the quote is approved · 50% deposit, 50% on completion · delivery fees may apply
 
-These also appear in the structured data (`<script type="application/ld+json">`) in the `<head>` of both pages, which Google reads. Update them there too if they change.
+These also appear in the structured data (`<script type="application/ld+json">`) in the `<head>` of both pages. Update them there too if they change.
 
-## Still to add when you have them
+## Lead form
 
-1. **Gallery photos.** The Gallery section is hidden (`hidden` attribute) until real photos exist. Instructions are in the comment above it in both pages.
-2. **Minimum quantities** and any other FAQ answers.
-3. **Specific promotional products** you can confirm.
+The form sends each lead straight to **info@allthingsprinted.ca** through [FormSubmit](https://formsubmit.co) (free, no account). The visitor stays on the page and sees a confirmation.
 
-## How the quote form works
+- **Fields:** name, phone, email, service and project details. Clicking a garment adds it to the details.
+- **Email:** a table with all the details. Replying to it replies to the customer.
+- **Text-message alert:** a copy goes to the phone's email-to-text address (`_cc` in the form). The email subject holds the name, phone and service, so the text shows the key facts. Both Bell (`5148151829@txt.bell.ca`) and Virgin Plus (`5148151829@vmobile.ca`) addresses are listed. Keep only the one for your carrier.
+- **Spam:** a hidden "honeypot" field (`_honey`) blocks most bots.
 
-The form has two modes. The switch is `turnstileSiteKey` in the `CONFIG` block at the top of `js/main.js`.
+**One-time activation:** the very first time the form is used on the live site, FormSubmit emails info@allthingsprinted.ca an activation link. Click it, and every lead after that is delivered. FormSubmit then also offers a random alias to use in the form's `action` instead of the email address. Swap it in on both pages to keep the address hidden from spam bots.
 
-- **Email-app mode (current, `turnstileSiteKey` empty).** Pressing *Préparer le courriel* opens the visitor's email app with the request filled in, addressed to `data-quote-email` on the form. The visitor attaches artwork and sends it. No server is needed.
-- **Online mode (`turnstileSiteKey` set).** The form shows a file upload and a Cloudflare Turnstile security check, and sends the request to the Cloudflare Worker (`worker/index.js`). The Worker verifies the Turnstile token with Cloudflare, checks the fields and files (up to 5 files, 15 MB total; PNG, JPG, PDF, SVG, AI, EPS, PSD, TIFF, WEBP), and emails everything, files attached, to `QUOTE_TO` through [Resend](https://resend.com). It also has a hidden "honeypot" field that silently drops bots.
-
-## Online quote form (Cloudflare Turnstile) setup
-
-Do these once, in this order. Nothing secret goes in the code.
-
-1. **Turnstile keys.** Cloudflare dashboard → *Turnstile* → *Add widget*. Add every hostname the site runs on (`allthingsprinted.ca`, `www.allthingsprinted.ca`, and your `*.workers.dev` or `desantisbuilds.github.io` address if used). Choose *Managed*. Copy the **site key** and the **secret key**.
-2. **Email sending (Resend).** Create a Resend account, add the domain `allthingsprinted.ca` and add the DNS records it shows. Before saving, check that none of them replace your existing email (MX) records, so info@allthingsprinted.ca keeps working. Create an API key with sending access.
-3. **Worker secrets.** Cloudflare dashboard → *Workers & Pages* → *allthingsprinted* → *Settings* → *Variables and Secrets*: add `TURNSTILE_SECRET` (the Turnstile secret key) and `RESEND_API_KEY` as **Secrets**. Or, from this folder: `npx wrangler secret put TURNSTILE_SECRET` and `npx wrangler secret put RESEND_API_KEY`.
-4. **Check `wrangler.toml`:** `QUOTE_TO` (where requests arrive), `QUOTE_FROM` (must use the domain verified in Resend).
-5. **Deploy the Worker.** Either connect this GitHub repository to the Worker (*Settings* → *Builds*), or run `npx wrangler deploy`. The Worker serves the whole website and the form at `/api/quote`.
-6. **Switch the form on.** Paste the Turnstile **site key** into `turnstileSiteKey` in `js/main.js`. If the website stays on GitHub Pages instead of the Worker, also set `quoteEndpoint` to the Worker's full address ending in `/api/quote`.
-7. **Test** by sending yourself a request with a small file.
-
-Run the Worker tests with `npm test` (Node 18 or newer).
+To change where leads go, edit the form's `action` (email) and `_cc` (text alert) in **both** `index.html` and `en/index.html`.
 
 ## Cookies and privacy
 
-- The site sets **no advertising or tracking cookies** and loads nothing from Google (the font is self-hosted in `assets/fonts/`).
-- A small notice appears on the first visit. Visitors can reopen it with *Paramètres des témoins / Cookie settings* in the footer. Their choice is stored in their own browser.
-- **If you add analytics**, put the Cloudflare Web Analytics token or Google Analytics ID in `CONFIG` in `js/main.js`. The notice then automatically becomes a real choice (*Tout accepter / Refuser / Personnaliser*), and the analytics script only loads after the visitor accepts.
-- Privacy policy pages: `confidentialite.html` (French) and `en/privacy.html` (English). Have them reviewed, and update them if you add analytics or other services.
+- The site sets **no advertising or tracking cookies** and loads nothing from Google (the font is self-hosted).
+- A small notice appears on the first visit. Visitors can reopen it with *Paramètres des témoins / Cookie settings* in the footer.
+- **If you add analytics**, put the Cloudflare Web Analytics token or Google Analytics ID in `CONFIG` at the top of `js/main.js`. The notice then becomes a real choice (*Tout accepter / Refuser / Personnaliser*), and analytics only load after the visitor accepts. Update the privacy policy too.
+- Have the privacy policy pages reviewed before launch.
+
+## Still to add when you have them
+
+- **Photos** of completed work (a gallery section can be added).
+- **Minimum quantities** and any other FAQ answers.
 
 ## Publishing on Cloudflare (allthingsprinted.ca)
 
-The site runs on the Cloudflare Worker `allthingsprinted`, which serves the website and the quote form.
+The site is published by the Cloudflare Worker `allthingsprinted`, which serves these files.
 
-1. **Connect the repository.** Cloudflare dashboard → *Workers & Pages* → *allthingsprinted* → *Settings* → *Builds* → connect `DeSantisBuilds/desantisbuilds.github.io`, production branch `main`. Every change merged into `main` then deploys automatically. (Alternative: run `npx wrangler deploy` from this folder.)
-2. **Connect the domain.** The domain's DNS must be managed by Cloudflare (*Add a domain* in the dashboard, then change the nameservers at your domain registrar to the two Cloudflare gives you). Then *allthingsprinted* → *Settings* → *Domains & Routes* → *Add* → *Custom domain*: add `allthingsprinted.ca` and `www.allthingsprinted.ca`. Cloudflare creates the HTTPS certificates automatically.
-3. **Before changing nameservers**, check that Cloudflare imported your existing email records (MX, and any TXT records), so info@allthingsprinted.ca keeps working.
-4. Set up the quote form as described in "Online quote form (Cloudflare Turnstile) setup" above.
+1. **Connect the repository.** Cloudflare dashboard → *Workers & Pages* → *allthingsprinted* → *Settings* → *Builds* → connect this GitHub repository, production branch `main`. Every change merged into `main` then deploys automatically. (Alternative: run `npx wrangler deploy` from this folder.)
+2. **Connect the domain.** The domain's DNS must be managed by Cloudflare (*Add a domain*, then change the nameservers at your registrar to the two Cloudflare gives you). Then *allthingsprinted* → *Settings* → *Domains & Routes* → *Add* → *Custom domain*: add `allthingsprinted.ca` and `www.allthingsprinted.ca`. HTTPS certificates are created automatically.
+3. **Before changing nameservers**, check that Cloudflare imported your existing email records (MX and TXT), so info@allthingsprinted.ca keeps working.
+4. Send one test lead from the live site and click FormSubmit's activation email (see "Lead form").
 
-To preview locally: `npx wrangler dev`, or `python3 -m http.server` (the quote form then stays in email-app mode).
+To preview locally, run `python3 -m http.server` in this folder and visit `http://localhost:8000`.

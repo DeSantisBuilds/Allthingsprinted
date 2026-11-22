@@ -744,3 +744,30 @@ input[type="file"] { padding: 10px; min-height: 0; background: #faf9f6; }
 .policy ul { padding-left: 1.2em; }
 .policy li { margin-bottom: 0.4em; }
 .policy-lang { margin-left: auto; }
+
+/* =========================================================
+   Simplified layout
+   ========================================================= */
+
+/* T-shirt print area: "( LOGO HERE )" */
+.hero-shirt .print-area { fill: none; stroke: #9aa0ad; stroke-width: 1.2; stroke-dasharray: 4 3; }
+.hero-shirt .print-label {
+  font-family: var(--font); font-size: 8px; font-weight: 800; font-stretch: 75%;
+  letter-spacing: 0.04em; fill: #6b7080;
+}
+
+/* Services as a simple card grid */
+.service-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 18px; }
+.service-card {
+  background: var(--paper); border: 1px solid var(--rule); border-radius: var(--radius);
+  border-top: 6px solid var(--cyan); padding: 22px 20px;
+}
+.service-card.ink-m { border-top-color: var(--magenta); }
+.service-card.ink-y { border-top-color: var(--yellow); }
+.service-card.ink-k { border-top-color: var(--key); }
+.service-card .service-icon { margin-bottom: 14px; }
+.service-card h3 { font-size: 1.15rem; margin-bottom: 8px; }
+.service-card p { color: var(--muted); margin: 0; font-size: 0.98rem; }
+
+/* Lead form */
+.section-dark .quote-card .form-intro { color: var(--text); margin-bottom: 4px; }
