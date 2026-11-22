@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>All Things Printed | Custom Apparel, Vinyl &amp; Promotional Printing</title>
   <meta name="description" content="All Things Printed offers custom DTF apparel printing, vinyl lettering and graphics, and promotional products. Request a quote today.">
-  <meta name="theme-color" content="#14161f">
+  <meta name="theme-color" content="#f4f6f8">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
   <!-- PLACEHOLDER: When you have a logo/favicon, add it to assets/images/ and uncomment:
   <link rel="icon" href="assets/images/favicon.png">
@@ -22,6 +22,7 @@
       <a class="brand" href="#top" aria-label="All Things Printed, back to top">
         <!-- PLACEHOLDER: To use your logo, replace the two spans below with:
              <img src="assets/images/logo.png" alt="All Things Printed" height="40"> -->
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
         <span class="brand-name">All Things Printed</span>
       </a>
       <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
@@ -35,7 +36,7 @@
           <li><a href="#about">About</a></li>
           <li><a href="#gallery">Gallery</a></li>
           <li><a href="#contact">Contact</a></li>
-          <li><a class="btn btn-sm btn-primary" href="#quote">Request a Quote</a></li>
+          <li><a class="btn btn-sm btn-primary" href="#quote">Request a quote</a></li>
         </ul>
       </nav>
     </div>
@@ -44,27 +45,37 @@
   <main id="main">
     <!-- ================= HERO ================= -->
     <section id="top" class="hero" aria-labelledby="hero-title">
-      <div class="container hero-inner">
-        <div class="hero-copy">
-          <p class="eyebrow">Custom Printing</p>
-          <h1 id="hero-title">Your ideas, <span class="ink">printed bold.</span></h1>
-          <p class="lead">
-            All Things Printed creates custom DTF-printed apparel, vinyl lettering and graphics,
-            and promotional products. Tell us what you have in mind and we&rsquo;ll put together a quote.
-          </p>
-          <div class="hero-actions">
-            <a class="btn btn-primary btn-lg" href="#quote">Request a Quote</a>
-            <a class="btn btn-ghost btn-lg" href="#services">See Our Services</a>
+      <div class="container">
+        <div class="proof-sheet">
+          <span class="crop crop-tl" aria-hidden="true"></span>
+          <span class="crop crop-tr" aria-hidden="true"></span>
+          <span class="crop crop-bl" aria-hidden="true"></span>
+          <span class="crop crop-br" aria-hidden="true"></span>
+
+          <h1 id="hero-title" class="overprint">
+            <span class="op-key">Your ideas, printed bold.</span>
+            <span class="op-layer op-c" aria-hidden="true">Your ideas, printed bold.</span>
+            <span class="op-layer op-m" aria-hidden="true">Your ideas, printed bold.</span>
+            <span class="op-layer op-y" aria-hidden="true">Your ideas, printed bold.</span>
+          </h1>
+
+          <div class="hero-foot">
+            <p class="lead">
+              Custom DTF-printed apparel, vinyl lettering and graphics, and promotional products.
+              Tell us what you have in mind and we&rsquo;ll put together a quote.
+            </p>
+            <div class="hero-actions">
+              <a class="btn btn-primary btn-lg" href="#quote">Request a quote</a>
+              <a class="btn btn-outline btn-lg" href="#services">See our services</a>
+            </div>
           </div>
-        </div>
-        <div class="hero-art" aria-hidden="true">
-          <div class="swatch swatch-c"></div>
-          <div class="swatch swatch-m"></div>
-          <div class="swatch swatch-y"></div>
-          <svg class="hero-shirt" viewBox="0 0 200 200">
-            <path d="M70 22 L44 32 L14 60 L34 86 L50 74 L50 182 L150 182 L150 74 L166 86 L186 60 L156 32 L130 22 C126 36 114 44 100 44 C86 44 74 36 70 22 Z" />
-          </svg>
-          <div class="registration"></div>
+
+          <div class="colour-bar" aria-hidden="true">
+            <span class="cb-c"></span><span class="cb-m"></span><span class="cb-y"></span><span class="cb-k"></span>
+            <span class="cb-cm"></span><span class="cb-my"></span><span class="cb-cy"></span>
+            <span class="cb-t1"></span><span class="cb-t2"></span><span class="cb-t3"></span>
+            <span class="reg-mark"></span>
+          </div>
         </div>
       </div>
     </section>
@@ -72,98 +83,85 @@
     <!-- ================= SERVICES ================= -->
     <section id="services" class="section" aria-labelledby="services-title">
       <div class="container">
-        <div class="section-head">
-          <p class="eyebrow">What We Do</p>
-          <h2 id="services-title">Services</h2>
-        </div>
-        <div class="cards cards-3">
-          <article class="card service">
-            <div class="service-icon icon-c" aria-hidden="true">
-              <svg viewBox="0 0 48 48"><path d="M17 6 L8 10 L3 19 L10 23 L13 20 L13 42 L35 42 L35 20 L38 23 L45 19 L40 10 L31 6 C30 10 27 12 24 12 C21 12 18 10 17 6 Z"/></svg>
+        <h2 id="services-title" class="section-title">What we print</h2>
+        <ul class="services" role="list">
+          <li class="service ink-c">
+            <div class="service-name">
+              <svg class="service-icon" viewBox="0 0 48 48" aria-hidden="true"><path d="M17 6 L8 10 L3 19 L10 23 L13 20 L13 42 L35 42 L35 20 L38 23 L45 19 L40 10 L31 6 C30 10 27 12 24 12 C21 12 18 10 17 6 Z"/></svg>
+              <h3>Custom DTF apparel printing</h3>
             </div>
-            <h3>Custom DTF Apparel Printing</h3>
             <p>
               Direct-to-film (DTF) printing transfers your full-colour design onto garments.
               Bring us your artwork, logo, or idea for shirts, hoodies, hats and more.
             </p>
             <!-- PLACEHOLDER: Add any specifics you want customers to know (minimums, turnaround, garment brands, etc.) -->
-          </article>
-          <article class="card service">
-            <div class="service-icon icon-m" aria-hidden="true">
-              <svg viewBox="0 0 48 48"><path d="M6 36 L30 12 L36 18 L12 42 L6 42 Z M33 9 L36 6 L42 12 L39 15 Z"/></svg>
+          </li>
+          <li class="service ink-m">
+            <div class="service-name">
+              <svg class="service-icon" viewBox="0 0 48 48" aria-hidden="true"><path d="M6 36 L30 12 L36 18 L12 42 L6 42 Z M33 9 L36 6 L42 12 L39 15 Z"/></svg>
+              <h3>Vinyl lettering &amp; graphics</h3>
             </div>
-            <h3>Vinyl Lettering &amp; Graphics</h3>
             <p>
               Cut vinyl lettering and graphics for names, logos, and custom designs.
               Let us know what you want lettered and where it&rsquo;s going.
             </p>
             <!-- PLACEHOLDER: List the surfaces/uses you offer (e.g. windows, vehicles, signs) once confirmed. -->
-          </article>
-          <article class="card service">
-            <div class="service-icon icon-y" aria-hidden="true">
-              <svg viewBox="0 0 48 48"><path d="M8 18 H40 V42 H8 Z M5 11 H43 V18 H5 Z M24 11 V42 M24 11 C18 3 10 6 14 11 M24 11 C30 3 38 6 34 11"/></svg>
+          </li>
+          <li class="service ink-y">
+            <div class="service-name">
+              <svg class="service-icon stroke" viewBox="0 0 48 48" aria-hidden="true"><path d="M8 18 H40 V42 H8 Z M5 11 H43 V18 H5 Z M24 11 V42 M24 11 C18 3 10 6 14 11 M24 11 C30 3 38 6 34 11"/></svg>
+              <h3>Promotional products</h3>
             </div>
-            <h3>Promotional Products</h3>
             <p>
-              Branded items that put your name in front of people &mdash; for businesses,
+              Branded items that put your name in front of people, for businesses,
               teams, events, and organizations.
             </p>
             <!-- PLACEHOLDER: List the specific promotional products you offer. -->
-          </article>
-        </div>
+          </li>
+        </ul>
       </div>
     </section>
 
     <!-- ================= PRODUCTS ================= -->
-    <section id="products" class="section section-dark" aria-labelledby="products-title">
+    <section id="products" class="section section-rack" aria-labelledby="products-title">
       <div class="container">
         <div class="section-head">
-          <p class="eyebrow">Apparel</p>
-          <h2 id="products-title">Product Categories</h2>
-          <p class="section-intro">Pick a garment, add your design. Ask about colours and sizes when you request a quote.</p>
+          <h2 id="products-title" class="section-title">Pick a garment</h2>
+          <p class="section-intro">Add your design to any of these. Ask about colours and sizes when you request a quote.</p>
         </div>
-        <ul class="products" role="list">
-          <li class="product">
-            <div class="product-visual pv-c" aria-hidden="true">
-              <svg viewBox="0 0 120 120"><path d="M42 14 L26 20 L8 38 L20 52 L30 45 L30 108 L90 108 L90 45 L100 52 L112 38 L94 20 L78 14 C75 22 68 27 60 27 C52 27 45 22 42 14 Z"/></svg>
-            </div>
-            <h3>T-Shirts</h3>
-          </li>
-          <li class="product">
-            <div class="product-visual pv-m" aria-hidden="true">
-              <svg viewBox="0 0 120 120"><path d="M42 14 L26 20 L14 40 L6 104 L20 106 L30 52 L30 108 L90 108 L90 52 L100 106 L114 104 L106 40 L94 20 L78 14 C75 22 68 27 60 27 C52 27 45 22 42 14 Z"/></svg>
-            </div>
-            <h3>Long Sleeves</h3>
-          </li>
-          <li class="product">
-            <div class="product-visual pv-y" aria-hidden="true">
-              <svg viewBox="0 0 120 120"><path d="M44 18 C44 6 76 6 76 18 L94 22 L106 40 L114 104 L100 106 L90 56 L90 108 L30 108 L30 56 L20 106 L6 104 L14 40 L26 22 Z"/><path class="detail" d="M46 20 C48 34 72 34 74 20 M40 80 H80 V98 H40 Z"/></svg>
-            </div>
-            <h3>Hoodies</h3>
-          </li>
-          <li class="product">
-            <div class="product-visual pv-c" aria-hidden="true">
-              <svg viewBox="0 0 120 120"><path d="M42 14 L26 20 L8 38 L20 52 L30 45 L30 108 L90 108 L90 45 L100 52 L112 38 L94 20 L78 14 L60 30 Z"/><path class="detail" d="M42 14 L52 34 L60 30 L68 34 L78 14 M60 30 V52"/></svg>
-            </div>
-            <h3>Polos</h3>
-          </li>
-          <li class="product">
-            <div class="product-visual pv-m" aria-hidden="true">
-              <svg viewBox="0 0 120 120"><path d="M20 76 C20 40 38 26 60 26 C82 26 100 40 100 76 Z"/><path d="M14 76 H112 C112 86 100 90 86 88 L14 84 Z"/><path class="detail" d="M60 26 V76 M54 22 H66"/></svg>
-            </div>
-            <h3>Hats &amp; Tuques</h3>
-          </li>
-        </ul>
+        <div class="rack">
+          <ul class="products" role="list">
+            <li class="product g-c">
+              <svg viewBox="0 0 120 120" aria-hidden="true"><path d="M42 14 L26 20 L8 38 L20 52 L30 45 L30 108 L90 108 L90 45 L100 52 L112 38 L94 20 L78 14 C75 22 68 27 60 27 C52 27 45 22 42 14 Z"/></svg>
+              <h3>T-shirts</h3>
+            </li>
+            <li class="product g-k">
+              <svg viewBox="0 0 120 120" aria-hidden="true"><path d="M42 14 L26 20 L14 40 L6 104 L20 106 L30 52 L30 108 L90 108 L90 52 L100 106 L114 104 L106 40 L94 20 L78 14 C75 22 68 27 60 27 C52 27 45 22 42 14 Z"/></svg>
+              <h3>Long sleeves</h3>
+            </li>
+            <li class="product g-y">
+              <svg viewBox="0 0 120 120" aria-hidden="true"><path d="M44 18 C44 6 76 6 76 18 L94 22 L106 40 L114 104 L100 106 L90 56 L90 108 L30 108 L30 56 L20 106 L6 104 L14 40 L26 22 Z"/><path class="detail" d="M46 20 C48 34 72 34 74 20 M40 80 H80 V98 H40 Z"/></svg>
+              <h3>Hoodies</h3>
+            </li>
+            <li class="product g-w">
+              <svg viewBox="0 0 120 120" aria-hidden="true"><path d="M42 14 L26 20 L8 38 L20 52 L30 45 L30 108 L90 108 L90 45 L100 52 L112 38 L94 20 L78 14 L60 30 Z"/><path class="detail" d="M42 14 L52 34 L60 30 L68 34 L78 14 M60 30 V52"/></svg>
+              <h3>Polos</h3>
+            </li>
+            <li class="product g-m">
+              <svg viewBox="0 0 120 120" aria-hidden="true"><path d="M20 76 C20 40 38 26 60 26 C82 26 100 40 100 76 Z"/><path d="M14 76 H112 C112 86 100 90 86 88 L14 84 Z"/><path class="detail" d="M60 26 V76 M54 22 H66"/></svg>
+              <h3>Hats &amp; tuques</h3>
+            </li>
+          </ul>
+        </div>
       </div>
     </section>
 
     <!-- ================= ABOUT ================= -->
     <section id="about" class="section" aria-labelledby="about-title">
       <div class="container about">
+        <h2 id="about-title" class="section-title">About All Things Printed</h2>
         <div class="about-copy">
-          <p class="eyebrow">Who We Are</p>
-          <h2 id="about-title">About All Things Printed</h2>
-          <p>
+          <p class="about-lede">
             All Things Printed is a custom print business offering DTF apparel printing,
             vinyl lettering and graphics, and promotional products.
           </p>
@@ -177,10 +175,6 @@
             <span class="placeholder">[PLACEHOLDER &mdash; Your service area, e.g. city / region]</span>
           </p>
         </div>
-        <div class="about-panel" aria-hidden="true">
-          <div class="cmyk-bars"><span></span><span></span><span></span><span></span></div>
-          <p class="about-panel-text">Apparel<br>Vinyl<br>Promo</p>
-        </div>
       </div>
     </section>
 
@@ -188,8 +182,7 @@
     <section id="gallery" class="section section-alt" aria-labelledby="gallery-title">
       <div class="container">
         <div class="section-head">
-          <p class="eyebrow">Our Work</p>
-          <h2 id="gallery-title">Gallery</h2>
+          <h2 id="gallery-title" class="section-title">Recent work</h2>
           <p class="section-intro">
             Photos of finished work coming soon.
             <!-- EDIT: To add a photo, put the image in assets/images/gallery/ and replace a
@@ -213,8 +206,7 @@
     <section id="contact" class="section section-dark" aria-labelledby="contact-title">
       <div class="container contact">
         <div class="contact-info">
-          <p class="eyebrow">Get In Touch</p>
-          <h2 id="contact-title">Contact &amp; Quotes</h2>
+          <h2 id="contact-title" class="section-title">Start a project</h2>
           <p>Have a project in mind? Reach out directly or use the quote form.</p>
           <!-- EDIT: Replace each [PLACEHOLDER] below with your real details, and update the
                href values (tel:, mailto:, social URLs). Delete any line you don't want shown. -->
@@ -244,11 +236,15 @@
         </div>
 
         <div id="quote" class="quote-card">
-          <h3>Request a Quote</h3>
+          <span class="crop crop-tl" aria-hidden="true"></span>
+          <span class="crop crop-tr" aria-hidden="true"></span>
+          <span class="crop crop-bl" aria-hidden="true"></span>
+          <span class="crop crop-br" aria-hidden="true"></span>
+          <h3>Request a quote</h3>
           <p class="quote-how">
             <strong>How this works:</strong> this website doesn&rsquo;t store or send messages itself.
-            When you press <em>Prepare Email</em>, your email app opens with your details filled in &mdash;
-            review it and press send. Nothing is sent until you do.
+            When you press <em>Prepare email</em>, your email app opens with your details filled in.
+            Review it and press send. Nothing is sent until you do.
           </p>
           <!-- EDIT: Set data-quote-email to the address quote requests should go to.
                While it is left as "you@example.com", the form will not open an email and will
@@ -281,7 +277,7 @@
               <div class="field">
                 <label for="q-product">Product <span class="optional">(if apparel)</span></label>
                 <select id="q-product" name="product">
-                  <option value="">&mdash; Select &mdash;</option>
+                  <option value="">Select a product</option>
                   <option>T-shirts</option>
                   <option>Long sleeves</option>
                   <option>Hoodies</option>
@@ -309,7 +305,7 @@
             </div>
             <p class="hint"><span aria-hidden="true">*</span> Required</p>
             <div id="quote-status" class="form-status" role="status" aria-live="polite"></div>
-            <button class="btn btn-primary btn-lg btn-block" type="submit">Prepare Email</button>
+            <button class="btn btn-primary btn-lg btn-block" type="submit">Prepare email</button>
           </form>
           <noscript>
             <p class="form-status is-error">The quote form needs JavaScript. Please contact us directly using the details on this page.</p>
@@ -322,7 +318,7 @@
   <footer class="site-footer">
     <div class="container footer-inner">
       <p class="brand-name">All Things Printed</p>
-      <p>Custom DTF apparel &middot; Vinyl lettering &amp; graphics &middot; Promotional products</p>
+      <p>Custom DTF apparel, vinyl lettering and graphics, and promotional products.</p>
       <p class="small">&copy; <span id="year">2026</span> All Things Printed</p>
     </div>
   </footer>
