@@ -21,9 +21,7 @@
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap" rel="stylesheet">
+  <link rel="preload" href="../assets/fonts/archivo-latin-wdth-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="../css/styles.css">
   <link rel="icon" type="image/png" href="../assets/images/favicon.png">
   <link rel="apple-touch-icon" href="../assets/images/apple-touch-icon.png">
@@ -498,13 +496,23 @@
           <span class="crop crop-bl" aria-hidden="true"></span>
           <span class="crop crop-br" aria-hidden="true"></span>
           <h3>Request a free quote</h3>
-          <p class="quote-how">
+          <p class="quote-how" data-mode="email">
             <strong>How this works:</strong> when you press <em>Prepare email</em>, your email app opens with
             your details filled in. <strong>Attach your artwork or logo</strong>, review the email and press send.
             Nothing is sent until you do.
           </p>
-          <!-- EDIT: data-quote-email is the address quote requests go to. -->
+          <p class="quote-how" data-mode="online" hidden>
+            <strong>How this works:</strong> fill in the form, attach your artwork if you have it,
+            and press <em>Send request</em>. We&rsquo;ll reply by email.
+          </p>
+          <!-- EDIT: data-quote-email receives requests when the form opens the visitor's email app.
+               Online sending (Turnstile + Worker) is configured in js/main.js (CONFIG). -->
           <form id="quote-form" class="quote-form" data-quote-email="info@allthingsprinted.ca" novalidate>
+            <input type="hidden" name="lang" value="en-CA">
+            <div class="hp-field" aria-hidden="true">
+              <label for="q-website">Leave this field empty</label>
+              <input id="q-website" name="website" type="text" tabindex="-1" autocomplete="off">
+            </div>
             <div class="field">
               <label for="q-name">Name <span aria-hidden="true">*</span></label>
               <input id="q-name" name="name" type="text" autocomplete="name" required>
@@ -586,13 +594,21 @@
               </select>
               <p id="q-artwork-hint" class="hint">Vector files are print-ready. Other files may need adjustment, for a fee.</p>
             </div>
+            <div class="field" data-mode="online" hidden>
+              <label for="q-files">Attach your artwork <span class="optional">(optional)</span></label>
+              <input id="q-files" name="artwork_files" type="file" multiple
+                accept=".png,.jpg,.jpeg,.pdf,.svg,.ai,.eps,.psd,.tif,.tiff,.webp" aria-describedby="q-files-hint">
+              <p id="q-files-hint" class="hint">PNG, JPG, PDF, SVG, AI, EPS, PSD, TIFF or WEBP. Up to 5 files, 15&nbsp;MB in total.</p>
+            </div>
             <div class="field">
               <label for="q-details">Project details <span aria-hidden="true">*</span></label>
               <textarea id="q-details" name="details" rows="5" required></textarea>
             </div>
             <p class="hint"><span aria-hidden="true">*</span> Required</p>
+            <div id="turnstile" class="turnstile" data-mode="online" hidden aria-label="Security check"></div>
+            <p class="hint">Your information is used only to respond to your request. See our <a href="privacy.html">privacy policy</a>.</p>
             <div id="quote-status" class="form-status" role="status" aria-live="polite"></div>
-            <button class="btn btn-primary btn-lg btn-block" type="submit">Prepare email</button>
+            <button class="btn btn-primary btn-lg btn-block" type="submit" data-label-email="Prepare email" data-label-online="Send request">Prepare email</button>
           </form>
           <noscript>
             <p class="form-status is-error">The quote form needs JavaScript. Please email info@allthingsprinted.ca or call (514) 815-1829.</p>
@@ -612,7 +628,7 @@
         <a href="https://www.instagram.com/allthingsprintedinc/">Instagram @allthingsprintedinc</a>
       </p>
       <p>Serving Greater Montreal &middot; Monday to Saturday, 9&nbsp;a.m. to 5&nbsp;p.m.</p>
-      <p class="small">&copy; <span id="year">2026</span> All Things Printed &middot; <a href="../index.html" hreflang="fr-CA" lang="fr-CA">Version fran&ccedil;aise</a></p>
+      <p class="small">&copy; <span id="year">2026</span> All Things Printed &middot; <a href="../index.html" hreflang="fr-CA" lang="fr-CA">Version fran&ccedil;aise</a> &middot; <a href="privacy.html">Privacy policy</a> &middot; <button type="button" class="link-button" data-cookie-settings>Cookie settings</button></p>
     </div>
   </footer>
 

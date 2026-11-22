@@ -2,6 +2,25 @@
 (function () {
   "use strict";
 
+  /* ========================================================================
+     SITE SETTINGS — the only part of this file you normally need to edit.
+     ======================================================================== */
+  var CONFIG = {
+    // Online quote form with Cloudflare Turnstile. Paste your Turnstile SITE key
+    // (the public one, it starts with "0x") to switch the form from "open the
+    // visitor's email app" to "send online with file uploads". The SECRET key
+    // never goes here: it is stored in Cloudflare (see README).
+    turnstileSiteKey: "",
+    // Address of the Worker that receives the form. "/api/quote" works when the
+    // site itself runs on the Worker. If the site is on GitHub Pages, use the
+    // Worker's full address, e.g. "https://allthingsprinted.<account>.workers.dev/api/quote".
+    quoteEndpoint: "/api/quote",
+    // Optional analytics. Leave empty to use none. When one is set, the cookie
+    // banner asks visitors for consent and loads it only if they accept.
+    cloudflareAnalyticsToken: "",
+    googleAnalyticsId: ""
+  };
+
   document.documentElement.classList.remove("no-js");
 
   // ----- Mobile navigation -----
@@ -122,7 +141,24 @@
     labels: { name: "Nom", email: "Courriel", phone: "Téléphone", service: "Service", product: "Produit",
       quantity: "Quantité approx.", needed_by: "Date souhaitée", sizes: "Tailles", colours: "Couleurs",
       locations: "Emplacements d'impression", artwork: "Visuel", details: "Détails du projet" },
-    attach: "(Joignez votre visuel ou votre logo à ce courriel.)"
+    attach: "(Joignez votre visuel ou votre logo à ce courriel.)",
+    sending: "Envoi en cours…",
+    sent: "Merci! Votre demande a bien été envoyée. Nous vous répondrons par courriel.",
+    captcha: "Veuillez compléter la vérification de sécurité, puis réessayer.",
+    captchaLoad: "La vérification de sécurité n'a pas pu se charger. Rechargez la page ou écrivez-nous à info@allthingsprinted.ca.",
+    fileType: "Un des fichiers n'est pas d'un format accepté (PNG, JPG, PDF, SVG, AI, EPS, PSD, TIFF ou WEBP).",
+    fileSize: "Les fichiers sont trop volumineux : 5 fichiers et 15 Mo au total au maximum.",
+    failed: "La demande n'a pas pu être envoyée. Réessayez, ou écrivez-nous à info@allthingsprinted.ca ou appelez le 514 815-1829.",
+    cookie: {
+      region: "Témoins et confidentialité",
+      title: "Témoins et confidentialité",
+      notice: "Ce site n'utilise aucun témoin publicitaire ni de suivi. Il utilise seulement ce qui est nécessaire à son fonctionnement, comme la mémorisation de ce choix et une vérification de sécurité Cloudflare qui protège le formulaire de soumission contre le pourriel.",
+      ask: "Nous utilisons ce qui est nécessaire au fonctionnement du site, comme une vérification de sécurité Cloudflare sur le formulaire. Avec votre permission, nous utilisons aussi des outils de mesure d'audience pour comprendre comment le site est utilisé.",
+      ok: "J'ai compris", accept: "Tout accepter", refuse: "Refuser", customize: "Personnaliser", save: "Enregistrer mes choix",
+      necessary: "Nécessaires (toujours actifs)", necessaryDesc: "Fonctionnement du site, mémorisation de vos choix et protection du formulaire.",
+      analytics: "Mesure d'audience", analyticsDesc: "Statistiques de visite pour améliorer le site.",
+      policy: "Politique de confidentialité", policyHref: "confidentialite.html"
+    }
   } : {
     invalid: "Please fill in your name, a valid email, and your project details.",
     notSet: "Online quote requests aren't set up yet, so nothing was sent. Please contact us directly.",
@@ -131,19 +167,165 @@
     labels: { name: "Name", email: "Email", phone: "Phone", service: "Service", product: "Product",
       quantity: "Approx. quantity", needed_by: "Needed by", sizes: "Sizes", colours: "Colours",
       locations: "Print locations", artwork: "Artwork", details: "Project details" },
-    attach: "(Please attach your artwork or logo to this email.)"
+    attach: "(Please attach your artwork or logo to this email.)",
+    sending: "Sending…",
+    sent: "Thank you! Your request was sent. We'll reply by email.",
+    captcha: "Please complete the security check, then try again.",
+    captchaLoad: "The security check couldn't load. Reload the page or email us at info@allthingsprinted.ca.",
+    fileType: "One of the files isn't an accepted format (PNG, JPG, PDF, SVG, AI, EPS, PSD, TIFF or WEBP).",
+    fileSize: "The files are too large: up to 5 files and 15 MB in total.",
+    failed: "Your request couldn't be sent. Please try again, or email info@allthingsprinted.ca or call (514) 815-1829.",
+    cookie: {
+      region: "Cookies and privacy",
+      title: "Cookies and privacy",
+      notice: "This site uses no advertising or tracking cookies. It only uses what it needs to work, such as remembering this choice and a Cloudflare security check that protects the quote form from spam.",
+      ask: "We use what the site needs to work, such as a Cloudflare security check on the quote form. With your permission, we also use analytics to understand how the site is used.",
+      ok: "Got it", accept: "Accept all", refuse: "Decline", customize: "Customize", save: "Save my choices",
+      necessary: "Necessary (always on)", necessaryDesc: "Site operation, remembering your choices and protecting the form.",
+      analytics: "Analytics", analyticsDesc: "Visit statistics to improve the site.",
+      policy: "Privacy policy", policyHref: "privacy.html"
+    }
   };
 
-  // ----- Quote form → pre-filled email (no server needed) -----
+  // ----- Cookie consent (Quebec Law 25: nothing optional runs before consent) -----
+  (function cookieConsent() {
+    var KEY = "atp-consent-v1";
+    var C = T.cookie;
+    var hasAnalytics = !!(CONFIG.cloudflareAnalyticsToken || CONFIG.googleAnalyticsId);
+
+    function read() {
+      try { return JSON.parse(localStorage.getItem(KEY) || "null"); } catch (e) { return null; }
+    }
+    function write(choice) {
+      choice.date = new Date().toISOString();
+      try { localStorage.setItem(KEY, JSON.stringify(choice)); } catch (e) { /* private mode: ask again next visit */ }
+    }
+
+    var analyticsLoaded = false;
+    function loadAnalytics() {
+      if (analyticsLoaded) return;
+      analyticsLoaded = true;
+      if (CONFIG.cloudflareAnalyticsToken) {
+        var cf = document.createElement("script");
+        cf.defer = true;
+        cf.src = "https://static.cloudflareinsights.com/beacon.min.js";
+        cf.setAttribute("data-cf-beacon", JSON.stringify({ token: CONFIG.cloudflareAnalyticsToken }));
+        document.head.appendChild(cf);
+      }
+      if (CONFIG.googleAnalyticsId) {
+        var ga = document.createElement("script");
+        ga.async = true;
+        ga.src = "https://www.googletagmanager.com/gtag/js?id=" + encodeURIComponent(CONFIG.googleAnalyticsId);
+        document.head.appendChild(ga);
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = function () { window.dataLayer.push(arguments); };
+        window.gtag("js", new Date());
+        window.gtag("config", CONFIG.googleAnalyticsId);
+      }
+    }
+
+    var banner = null;
+    function close() { if (banner) { banner.remove(); banner = null; } }
+    function decide(analytics) {
+      write({ analytics: !!analytics });
+      close();
+      if (analytics && hasAnalytics) loadAnalytics();
+      else if (analyticsLoaded) location.reload(); // consent withdrawn: reload without the scripts
+    }
+
+    function button(label, cls, onClick) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "btn btn-sm " + cls;
+      b.textContent = label;
+      b.addEventListener("click", onClick);
+      return b;
+    }
+
+    function open(showDetails) {
+      close();
+      var saved = read();
+      banner = document.createElement("section");
+      banner.className = "cookie-banner";
+      banner.setAttribute("aria-label", C.region);
+      var inner = document.createElement("div");
+      inner.className = "cookie-inner";
+      var h = document.createElement("h2");
+      h.className = "cookie-title";
+      h.textContent = C.title;
+      var p = document.createElement("p");
+      p.textContent = hasAnalytics ? C.ask : C.notice;
+      var link = document.createElement("a");
+      link.href = C.policyHref;
+      link.textContent = C.policy;
+      p.appendChild(document.createTextNode(" "));
+      p.appendChild(link);
+      inner.appendChild(h);
+      inner.appendChild(p);
+
+      var actions = document.createElement("div");
+      actions.className = "cookie-actions";
+      if (!hasAnalytics) {
+        actions.appendChild(button(C.ok, "btn-primary", function () { decide(false); }));
+      } else {
+        var details = document.createElement("div");
+        details.className = "cookie-details";
+        details.hidden = !showDetails;
+        details.innerHTML =
+          '<label class="cookie-option"><input type="checkbox" checked disabled> <span><strong></strong><br><span class="cookie-desc"></span></span></label>' +
+          '<label class="cookie-option"><input type="checkbox" data-analytics> <span><strong></strong><br><span class="cookie-desc"></span></span></label>';
+        var strongs = details.querySelectorAll("strong"), descs = details.querySelectorAll(".cookie-desc");
+        strongs[0].textContent = C.necessary; descs[0].textContent = C.necessaryDesc;
+        strongs[1].textContent = C.analytics; descs[1].textContent = C.analyticsDesc;
+        var box = details.querySelector("[data-analytics]");
+        box.checked = !!(saved && saved.analytics);
+        inner.appendChild(details);
+
+        actions.appendChild(button(C.accept, "btn-primary", function () { decide(true); }));
+        actions.appendChild(button(C.refuse, "btn-outline-light", function () { decide(false); }));
+        var custom = button(showDetails ? C.save : C.customize, "btn-outline-light", function () {
+          if (details.hidden) { details.hidden = false; custom.textContent = C.save; box.focus(); }
+          else decide(box.checked);
+        });
+        actions.appendChild(custom);
+      }
+      inner.appendChild(actions);
+      banner.appendChild(inner);
+      document.body.appendChild(banner);
+      return banner;
+    }
+
+    document.querySelectorAll("[data-cookie-settings]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var el = open(true);
+        var first = el.querySelector("input:not([disabled]), button");
+        if (first) first.focus();
+      });
+    });
+
+    var saved = read();
+    if (!saved) open(false);
+    else if (saved.analytics && hasAnalytics) loadAnalytics();
+  })();
+
+  // ----- Quote form -----
   var form = document.getElementById("quote-form");
   if (!form) return;
   var status = document.getElementById("quote-status");
+  var submitBtn = form.querySelector('button[type="submit"]');
   var PLACEHOLDER_EMAIL = "you@example.com";
+  // "online": Turnstile + Worker with file uploads. "email": opens the visitor's email app.
+  var ONLINE = !!(CONFIG.turnstileSiteKey && CONFIG.quoteEndpoint);
 
   function showStatus(message, type) {
     status.className = "form-status is-" + type;
     status.textContent = message;
   }
+
+  document.querySelectorAll("[data-mode]").forEach(function (el) {
+    el.hidden = el.getAttribute("data-mode") !== (ONLINE ? "online" : "email");
+  });
+  if (submitBtn) submitBtn.textContent = submitBtn.getAttribute(ONLINE ? "data-label-online" : "data-label-email") || submitBtn.textContent;
 
   // Garment cards and service links pre-select the matching option in the form.
   function preselect(selectName, value) {
@@ -166,22 +348,88 @@
     });
   });
 
-  form.addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    // Basic validation
-    var firstInvalid = null;
-    form.querySelectorAll("[required]").forEach(function (el) {
-      var ok = el.value.trim() !== "" && el.checkValidity();
-      el.setAttribute("aria-invalid", ok ? "false" : "true");
-      if (!ok && !firstInvalid) firstInvalid = el;
-    });
-    if (firstInvalid) {
-      showStatus(T.invalid, "error");
-      firstInvalid.focus();
-      return;
+  // Cloudflare Turnstile: loaded only in online mode, when the form comes near the screen.
+  var widgetId = null, turnstileState = "idle";
+  function loadTurnstile() {
+    if (!ONLINE || turnstileState !== "idle") return;
+    turnstileState = "loading";
+    window.atpTurnstileReady = function () {
+      try {
+        widgetId = window.turnstile.render("#turnstile", {
+          sitekey: CONFIG.turnstileSiteKey,
+          language: FR ? "fr" : "en",
+          theme: "light"
+        });
+        turnstileState = "ready";
+      } catch (e) { turnstileState = "error"; }
+    };
+    var s = document.createElement("script");
+    s.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=atpTurnstileReady";
+    s.async = true; s.defer = true;
+    s.onerror = function () { turnstileState = "error"; showStatus(T.captchaLoad, "error"); };
+    document.head.appendChild(s);
+  }
+  if (ONLINE) {
+    if ("IntersectionObserver" in window) {
+      var io = new IntersectionObserver(function (entries) {
+        if (entries.some(function (en) { return en.isIntersecting; })) { loadTurnstile(); io.disconnect(); }
+      }, { rootMargin: "600px 0px" });
+      io.observe(form);
+    } else {
+      loadTurnstile();
     }
+    form.addEventListener("focusin", loadTurnstile);
+  }
 
+  var ALLOWED_EXT = ["png", "jpg", "jpeg", "pdf", "svg", "ai", "eps", "psd", "tif", "tiff", "webp"];
+  function checkFiles() {
+    var input = form.elements.artwork_files;
+    if (!input || !input.files) return null;
+    var total = 0;
+    if (input.files.length > 5) return T.fileSize;
+    for (var i = 0; i < input.files.length; i++) {
+      var ext = input.files[i].name.split(".").pop().toLowerCase();
+      if (ALLOWED_EXT.indexOf(ext) === -1) return T.fileType;
+      total += input.files[i].size;
+    }
+    return total > 15 * 1024 * 1024 ? T.fileSize : null;
+  }
+
+  function sendOnline() {
+    var fileProblem = checkFiles();
+    if (fileProblem) { showStatus(fileProblem, "error"); form.elements.artwork_files.focus(); return; }
+    var token = window.turnstile && widgetId !== null ? window.turnstile.getResponse(widgetId) : "";
+    if (!token) { showStatus(turnstileState === "error" ? T.captchaLoad : T.captcha, "error"); return; }
+
+    var label = submitBtn.textContent;
+    submitBtn.disabled = true;
+    submitBtn.textContent = T.sending;
+    showStatus(T.sending, "info");
+    var data = new FormData(form);
+    if (!data.get("cf-turnstile-response")) data.set("cf-turnstile-response", token);
+
+    fetch(CONFIG.quoteEndpoint, { method: "POST", body: data })
+      .then(function (r) { return r.json().catch(function () { return { ok: false, error: "send" }; }); })
+      .then(function (res) {
+        if (res && res.ok) {
+          form.reset();
+          showStatus(T.sent, "success");
+        } else {
+          var code = res && res.error;
+          showStatus(code === "captcha" ? T.captcha : code === "file_type" ? T.fileType :
+            (code === "file_size" || code === "too_many_files") ? T.fileSize :
+            code === "invalid" ? T.invalid : T.failed, "error");
+        }
+      })
+      .catch(function () { showStatus(T.failed, "error"); })
+      .then(function () {
+        submitBtn.disabled = false;
+        submitBtn.textContent = label;
+        if (window.turnstile && widgetId !== null) window.turnstile.reset(widgetId);
+      });
+  }
+
+  function sendByEmailApp() {
     var to = (form.getAttribute("data-quote-email") || "").trim();
     if (!to || to === PLACEHOLDER_EMAIL) {
       showStatus(T.notSet, "warning");
@@ -222,5 +470,25 @@
 
     showStatus(T.opened(to), "success");
     window.location.href = href;
+  }
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    // Basic validation
+    var firstInvalid = null;
+    form.querySelectorAll("[required]").forEach(function (el) {
+      var ok = el.value.trim() !== "" && el.checkValidity();
+      el.setAttribute("aria-invalid", ok ? "false" : "true");
+      if (!ok && !firstInvalid) firstInvalid = el;
+    });
+    if (firstInvalid) {
+      showStatus(T.invalid, "error");
+      firstInvalid.focus();
+      return;
+    }
+
+    if (ONLINE) sendOnline();
+    else sendByEmailApp();
   });
 })();

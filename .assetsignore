@@ -1,0 +1,13 @@
+.git
+.github
+worker
+tests
+node_modules
+wrangler.toml
+package.json
+package-lock.json
+README.md
+.assetsignore
+.dev.vars
+.wrangler
+.gitignore

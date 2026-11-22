@@ -1,0 +1,22 @@
+# Cloudflare Worker for allthingsprinted.ca: serves the website and the quote form API.
+# Setup steps are in README.md under "Online quote form (Cloudflare Turnstile)".
+name = "allthingsprinted"
+main = "worker/index.js"
+compatibility_date = "2025-09-01"
+
+# The website files. Files listed in .assetsignore are not published.
+[assets]
+directory = "./"
+binding = "ASSETS"
+
+[vars]
+# Where quote requests are emailed (comma-separate several addresses).
+QUOTE_TO = "info@allthingsprinted.ca"
+# Sender address. Its domain must be verified in Resend.
+QUOTE_FROM = "All Things Printed <soumissions@allthingsprinted.ca>"
+# Only needed if the website is hosted somewhere else (for example GitHub Pages).
+ALLOWED_ORIGINS = "https://www.allthingsprinted.ca,https://allthingsprinted.ca,https://desantisbuilds.github.io"
+
+# Secrets: set these once with the commands below. Never put them in this file.
+#   npx wrangler secret put TURNSTILE_SECRET
+#   npx wrangler secret put RESEND_API_KEY
