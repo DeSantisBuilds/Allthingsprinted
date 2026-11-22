@@ -231,6 +231,33 @@ p { margin: 0 0 1em; }
 @keyframes reg-m { from { transform: translate(0.35em, 0.1em);  opacity: 0; } }
 @keyframes reg-y { from { transform: translate(-0.1em, 0.35em); opacity: 0; } }
 
+/* Headline beside the T-shirt artwork */
+.hero-top {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(220px, 400px);
+  gap: 24px 40px; align-items: center;
+  margin-bottom: clamp(28px, 5vw, 48px);
+}
+.hero-top .overprint { margin-bottom: 0; }
+@media (max-width: 860px) {
+  .hero-top { grid-template-columns: 1fr; }
+}
+
+/* T-shirt with three process-ink circles behind it. On the white sheet the
+   inks overprint (multiply), so where they overlap they mix like real ink. */
+.hero-art { position: relative; aspect-ratio: 1; width: 100%; max-width: 400px; justify-self: center; }
+.swatch { position: absolute; border-radius: 50%; mix-blend-mode: multiply; }
+.swatch-c { background: var(--cyan);    width: 58%; height: 58%; left: 4%;  top: 6%; }
+.swatch-m { background: var(--magenta); width: 58%; height: 58%; right: 2%; top: 14%; }
+.swatch-y { background: var(--yellow);  width: 58%; height: 58%; left: 22%; bottom: 2%; }
+.hero-shirt {
+  position: absolute; inset: 14%; width: 72%; height: 72%;
+  filter: drop-shadow(0 14px 22px rgba(23, 24, 28, 0.35));
+}
+.hero-shirt path { fill: var(--paper); stroke: var(--key); stroke-width: 3; stroke-linejoin: round; }
+@media (max-width: 860px) {
+  .hero-art { max-width: 280px; }
+}
+
 .hero-foot {
   display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 24px 48px; align-items: end;
   padding-bottom: clamp(32px, 5vw, 56px);
