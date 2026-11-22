@@ -130,7 +130,11 @@
     sent: "Merci! Votre demande a bien été envoyée. Nous vous contacterons rapidement.",
     failed: "La demande n'a pas pu être envoyée. Réessayez, ou appelez-nous au 514 815-1829 ou écrivez à info@allthingsprinted.ca.",
     subject: "Nouveau lead",
+    orderSubject: "Nouvelle commande",
     product: "Produit",
+    noSizes: "Indiquez au moins une quantité dans les tailles.",
+    orderSent: "Merci! Votre commande a bien été envoyée. Vous recevrez un courriel de confirmation : répondez-y avec votre logo.",
+    units: "unités",
     cookie: {
       region: "Témoins et confidentialité",
       title: "Témoins et confidentialité",
@@ -147,7 +151,11 @@
     sent: "Thank you! Your request was sent. We'll contact you shortly.",
     failed: "Your request couldn't be sent. Please try again, or call (514) 815-1829 or email info@allthingsprinted.ca.",
     subject: "New lead",
+    orderSubject: "New order",
     product: "Product",
+    noSizes: "Please enter a quantity for at least one size.",
+    orderSent: "Thank you! Your order was sent. You'll get a confirmation email: reply to it with your logo.",
+    units: "units",
     cookie: {
       region: "Cookies and privacy",
       title: "Cookies and privacy",
@@ -281,78 +289,136 @@
     else if (saved.analytics && hasAnalytics) loadAnalytics();
   })();
 
-  // ----- Lead form: sent straight to the business email by FormSubmit -----
-  // The form's "action" is the FormSubmit address. With JavaScript we send it in
+  // ----- Forms: sent straight to the business email by FormSubmit -----
+  // Each form's "action" is the FormSubmit address. With JavaScript we send it in
   // the background (FormSubmit's /ajax/ address) and show a message on the page;
   // without JavaScript the browser posts it normally.
-  var form = document.getElementById("lead-form");
-  if (!form) return;
-  var status = document.getElementById("form-status");
-  var submitBtn = form.querySelector('button[type="submit"]');
-  var details = form.querySelector("textarea");
-  var serviceSelect = form.querySelector("select");
+  function setupForm(form, opts) {
+    var status = form.querySelector("[data-status]") || document.getElementById("form-status");
+    var submitBtn = form.querySelector('button[type="submit"]');
 
-  function showStatus(message, type) {
-    status.className = "form-status is-" + type;
-    status.textContent = message;
-  }
-
-  // Clicking a garment starts the lead with that product.
-  document.querySelectorAll("[data-product]").forEach(function (link) {
-    link.addEventListener("click", function () {
-      if (serviceSelect) serviceSelect.selectedIndex = 0;
-      var line = T.product + ": " + link.getAttribute("data-product");
-      if (details && details.value.indexOf(line) === -1) {
-        details.value = line + (details.value ? "\n" + details.value : "\n");
-      }
-    });
-  });
-
-  form.addEventListener("submit", function (e) {
-    e.preventDefault();
-    var firstInvalid = null;
-    form.querySelectorAll("[required]").forEach(function (el) {
-      var ok = el.value.trim() !== "" && el.checkValidity();
-      el.setAttribute("aria-invalid", ok ? "false" : "true");
-      if (!ok && !firstInvalid) firstInvalid = el;
-    });
-    if (firstInvalid) {
-      showStatus(T.invalid, "error");
-      firstInvalid.focus();
-      return;
+    function showStatus(message, type) {
+      status.className = "form-status is-" + type;
+      status.textContent = message;
     }
 
-    // Put the key facts in the subject: it is what shows up in the text-message alert.
-    var name = form.querySelector("#q-name").value.trim();
-    var phone = form.querySelector("#q-phone").value.trim();
-    var service = serviceSelect ? serviceSelect.value : "";
-    form.querySelector('input[name="_subject"]').value =
-      T.subject + ": " + name + " - " + phone + " - " + service;
+    // Clear an error message as soon as the visitor edits the form again.
+    form.addEventListener("input", function () {
+      if (status.classList.contains("is-error")) { status.className = "form-status"; status.textContent = ""; }
+    });
 
-    var label = submitBtn.textContent;
-    submitBtn.disabled = true;
-    submitBtn.textContent = T.sending;
-    showStatus(T.sending, "info");
-
-    fetch(form.action.replace("formsubmit.co/", "formsubmit.co/ajax/"), {
-      method: "POST",
-      headers: { "Accept": "application/json" },
-      body: new FormData(form)
-    })
-      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { ok: r.ok, body: j }; }); })
-      .then(function (res) {
-        var success = res.ok && res.body && (res.body.success === true || res.body.success === "true");
-        if (success) {
-          form.reset();
-          showStatus(T.sent, "success");
-        } else {
-          showStatus(T.failed, "error");
-        }
-      })
-      .catch(function () { showStatus(T.failed, "error"); })
-      .then(function () {
-        submitBtn.disabled = false;
-        submitBtn.textContent = label;
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var firstInvalid = null;
+      form.querySelectorAll("[required]").forEach(function (el) {
+        var ok = el.value.trim() !== "" && el.checkValidity();
+        el.setAttribute("aria-invalid", ok ? "false" : "true");
+        if (!ok && !firstInvalid) firstInvalid = el;
       });
-  });
+      if (firstInvalid) {
+        showStatus(T.invalid, "error");
+        firstInvalid.focus();
+        return;
+      }
+      if (opts.validate) {
+        var problem = opts.validate();
+        if (problem) { showStatus(problem.message, "error"); if (problem.focus) problem.focus.focus(); return; }
+      }
+
+      // The subject carries the key facts (it is what shows in a text-message alert).
+      form.querySelector('input[name="_subject"]').value = opts.subject();
+      var data = new FormData(form);
+      if (opts.prepare) opts.prepare(data);
+
+      var label = submitBtn.textContent;
+      submitBtn.disabled = true;
+      submitBtn.textContent = T.sending;
+      showStatus(T.sending, "info");
+
+      fetch(form.action.replace("formsubmit.co/", "formsubmit.co/ajax/"), {
+        method: "POST",
+        headers: { "Accept": "application/json" },
+        body: data
+      })
+        .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { ok: r.ok, body: j }; }); })
+        .then(function (res) {
+          var success = res.ok && res.body && (res.body.success === true || res.body.success === "true");
+          if (success) {
+            form.reset();
+            if (opts.afterReset) opts.afterReset();
+            showStatus(opts.sent, "success");
+          } else {
+            showStatus(T.failed, "error");
+          }
+        })
+        .catch(function () { showStatus(T.failed, "error"); })
+        .then(function () {
+          submitBtn.disabled = false;
+          submitBtn.textContent = label;
+        });
+    });
+  }
+
+  function val(form, selector) {
+    var el = form.querySelector(selector);
+    return el ? el.value.trim() : "";
+  }
+
+  // Quote / lead form
+  var lead = document.getElementById("lead-form");
+  if (lead) {
+    setupForm(lead, {
+      sent: T.sent,
+      subject: function () {
+        return T.subject + ": " + val(lead, "#q-name") + " - " + val(lead, "#q-phone") + " - " + val(lead, "select");
+      }
+    });
+  }
+
+  // Order form
+  var order = document.getElementById("order-form");
+  if (order) {
+    var sizeInputs = order.querySelectorAll("[data-size]");
+    var totalOut = order.querySelector("[data-total]");
+    var totalField = order.querySelector("[data-total-field]");
+    var productSelect = order.querySelector("#o-product");
+
+    var total = function () {
+      var sum = 0;
+      sizeInputs.forEach(function (i) { var n = parseInt(i.value, 10); if (n > 0) sum += n; });
+      return sum;
+    };
+    var updateTotal = function () { totalOut.textContent = total(); };
+    sizeInputs.forEach(function (i) { i.addEventListener("input", updateTotal); });
+
+    // Clicking a garment opens the order form with that product selected.
+    document.querySelectorAll("[data-product]").forEach(function (link) {
+      link.addEventListener("click", function () {
+        var wanted = link.getAttribute("data-product");
+        for (var i = 0; i < productSelect.options.length; i++) {
+          if (productSelect.options[i].text === wanted) { productSelect.selectedIndex = i; break; }
+        }
+      });
+    });
+
+    setupForm(order, {
+      sent: T.orderSent,
+      validate: function () {
+        return total() > 0 ? null : { message: T.noSizes, focus: sizeInputs[0] };
+      },
+      subject: function () {
+        return T.orderSubject + ": " + val(order, "#o-name") + " - " + val(order, "#o-product") +
+          " - " + total() + " " + T.units + " - " + val(order, "#o-phone");
+      },
+      prepare: function (data) {
+        // Send only the sizes that were ordered, plus the total.
+        totalField.value = String(total());
+        data.set(totalField.name, totalField.value);
+        sizeInputs.forEach(function (i) {
+          if (!(parseInt(i.value, 10) > 0)) data.delete(i.name);
+        });
+      },
+      afterReset: updateTotal
+    });
+  }
 })();

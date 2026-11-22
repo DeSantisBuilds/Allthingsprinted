@@ -771,3 +771,34 @@ input[type="file"] { padding: 10px; min-height: 0; background: #faf9f6; }
 
 /* Lead form */
 .section-dark .quote-card .form-intro { color: var(--text); margin-bottom: 4px; }
+
+/* ---------- Order form ---------- */
+.order { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 48px; align-items: start; }
+@media (max-width: 960px) { .order { grid-template-columns: 1fr; gap: 28px; } }
+.order-intro { position: sticky; top: 100px; }
+@media (max-width: 960px) { .order-intro { position: static; } }
+.order-steps { margin: 24px 0 0; padding: 0; list-style: none; counter-reset: ostep; display: grid; gap: 14px; }
+.order-steps li { counter-increment: ostep; position: relative; padding-left: 46px; color: var(--text); min-height: 32px; }
+.order-steps li::before {
+  content: counter(ostep); position: absolute; left: 0; top: -2px;
+  width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center;
+  font-weight: 900; color: var(--paper); background: var(--key);
+}
+.order-steps li:nth-child(1)::before { background: var(--cyan); }
+.order-steps li:nth-child(2)::before { background: var(--magenta); }
+.order-steps li:nth-child(3)::before { background: var(--yellow); color: var(--key); }
+
+.order-card {
+  background: var(--paper); border-radius: var(--radius); border-top: 8px solid var(--cyan);
+  box-shadow: 0 16px 40px rgba(20, 22, 31, 0.12); padding: clamp(20px, 4vw, 36px);
+}
+.order-card .quote-form { margin-top: 0; gap: 22px; }
+.order-group { border: 0; margin: 0; padding: 0 0 22px; border-bottom: 1px solid var(--rule); display: grid; gap: 16px; }
+.order-group > legend { font-weight: 850; font-stretch: var(--wide); font-size: 1.15rem; color: var(--key); padding: 0; margin-bottom: 12px; }
+.field-label { font-weight: 700; font-size: 0.95rem; color: var(--key); }
+
+.size-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+@media (min-width: 560px) { .size-grid { grid-template-columns: repeat(8, minmax(0, 1fr)); } }
+.size-cell { display: grid; gap: 4px; text-align: center; font-weight: 700; font-size: 0.9rem; color: var(--key); }
+.size-cell input { text-align: center; padding: 10px 4px; min-height: 46px; }
+.size-one span { font-size: 0.78rem; line-height: 1.2; }
