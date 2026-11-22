@@ -20,19 +20,23 @@ The design uses the original All Things Printed colours (deep ink navy, warm off
 
 Search `index.html` for **`PLACEHOLDER`** and **`EDIT`**. Placeholders show on the page with a yellow dashed highlight until you replace them.
 
-Already filled in: email (info@allthingsprinted.ca, also used by the quote form), phone ((515) 815-1829) and website (www.allthingsprinted.ca). They appear in the Contact section and the footer. If any of them change, update both places and the form's `data-quote-email`.
+Already filled in, in the Contact section and the footer:
 
-Still to fill in:
+- Email: info@allthingsprinted.ca (also where the quote form sends)
+- Phone: (515) 815-1829
+- Website: www.allthingsprinted.ca
+- Instagram: @allthingprinted
+- Hours: Monday to Saturday, 9 a.m. to 5 p.m.
+- Service area: Greater Montreal (also in the About section)
 
-1. **Service area.** This appears in both the About section and the Contact section.
-2. **Hours.** Fill in your hours or delete that line.
-3. **Social links.** Replace `href="#"` with your profile URLs, change the link text (for example, "Facebook"), and remove `class="placeholder"` and `data-placeholder-link`. Delete any links you don't use.
-4. **About text.** Replace the dashed placeholder paragraph with your story.
-5. **Service details** (optional). HTML comments under each service show where to add details like minimums or specific products.
-6. **Logo/favicon** (optional). Instructions are in comments in the `<head>` and header.
-7. **Gallery photos.** Replace each `gallery-placeholder` block with an `<img>` tag. The exact markup is in the comment above the gallery.
+If any of these change, update every place they appear. For the email, that includes the form's `data-quote-email`.
 
-Once you replace a placeholder, also remove its `class="placeholder"` so the yellow highlight goes away.
+Still to add when you have them:
+
+1. **Gallery photos.** Replace each `gallery-placeholder` block with an `<img>` tag. The exact markup is in the comment above the gallery.
+2. **About text** (optional). Add paragraphs to the About section if you want to tell your story.
+3. **Service details** (optional). HTML comments under each service show where to add details like minimums or specific products.
+4. **Logo/favicon** (optional). Instructions are in comments in the `<head>` and header.
 
 ## How the quote form works
 
