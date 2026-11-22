@@ -20,7 +20,7 @@ A simple static website for All Things Printed: plain HTML, CSS and a little Jav
 
 ## Page sections
 
-Hero (T-shirt with a "( VOTRE LOGO ICI )" print area) → Services → Garments → Order form → About → FAQ → Contact and quote form.
+Hero (T-shirt with a "( VOTRE LOGO ICI )" print area) → Services → Garments → About → FAQ → Contact and quote form.
 
 ## Business details on the site
 
@@ -36,21 +36,12 @@ The form sends each lead straight to **info@allthingsprinted.ca** through [FormS
 
 - **Fields:** name, phone, email, service and project details. Clicking a garment adds it to the details.
 - **Email:** a table with all the details. Replying to it replies to the customer.
-- **Text-message alert:** a copy goes to the Bell email-to-text address `5148151829@txt.bell.ca` (`_cc` in the form), so it arrives as a text on 514 815-1829. The email subject holds the name, phone and service, so the text shows the key facts. If the phone changes carrier, update `_cc` in both forms on both pages.
+- **Text-message alert:** a copy goes to the Bell email-to-text address `5148151829@txt.bell.ca` (`_cc` in the form), so it arrives as a text on 514 815-1829. The email subject holds the name, phone and service, so the text shows the key facts. If the phone changes carrier, update `_cc` on both pages.
 - **Spam:** a hidden "honeypot" field (`_honey`) blocks most bots.
 
 **One-time activation:** the very first time the form is used on the live site, FormSubmit emails info@allthingsprinted.ca an activation link. Click it, and every lead after that is delivered. FormSubmit then also offers a random alias to use in the form's `action` instead of the email address. Swap it in on both pages to keep the address hidden from spam bots.
 
 To change where leads go, edit the form's `action` (email) and `_cc` (text alert) in **both** `index.html` and `en/index.html`.
-
-## Order form
-
-The *Commander / Order* section has a full order form, also delivered by FormSubmit to **info@allthingsprinted.ca**, with a text-message alert to the Bell number (same `_cc` as the quote form).
-
-- **Customer fills in:** product, garment colour, quantity per size (XS to 3XL, or one size) with a live total, printing method, print locations, date needed, name, company, phone, email, delivery address and notes. Clicking a garment opens the form with that product selected.
-- **Email you receive:** subject like *Nouvelle commande: Marie Tremblay - Kangourous - 30 unités - 514 555-0100*, then a table of the details. Only the sizes actually ordered are listed.
-- **Customer receives** an automatic confirmation email (`_autoresponse` in the form) asking them to reply with their logo or artwork. Edit that text in both pages if your process changes.
-- There is **no online payment**: you confirm the price, mockup and 50% deposit by email, as before.
 
 ## Cookies and privacy
 

@@ -130,11 +130,7 @@
     sent: "Merci! Votre demande a bien été envoyée. Nous vous contacterons rapidement.",
     failed: "La demande n'a pas pu être envoyée. Réessayez, ou appelez-nous au 514 815-1829 ou écrivez à info@allthingsprinted.ca.",
     subject: "Nouveau lead",
-    orderSubject: "Nouvelle commande",
     product: "Produit",
-    noSizes: "Indiquez au moins une quantité dans les tailles.",
-    orderSent: "Merci! Votre commande a bien été envoyée. Vous recevrez un courriel de confirmation : répondez-y avec votre logo.",
-    units: "unités",
     cookie: {
       region: "Témoins et confidentialité",
       title: "Témoins et confidentialité",
@@ -151,11 +147,7 @@
     sent: "Thank you! Your request was sent. We'll contact you shortly.",
     failed: "Your request couldn't be sent. Please try again, or call (514) 815-1829 or email info@allthingsprinted.ca.",
     subject: "New lead",
-    orderSubject: "New order",
     product: "Product",
-    noSizes: "Please enter a quantity for at least one size.",
-    orderSent: "Thank you! Your order was sent. You'll get a confirmation email: reply to it with your logo.",
-    units: "units",
     cookie: {
       region: "Cookies and privacy",
       title: "Cookies and privacy",
@@ -375,50 +367,18 @@
     });
   }
 
-  // Order form
-  var order = document.getElementById("order-form");
-  if (order) {
-    var sizeInputs = order.querySelectorAll("[data-size]");
-    var totalOut = order.querySelector("[data-total]");
-    var totalField = order.querySelector("[data-total-field]");
-    var productSelect = order.querySelector("#o-product");
-
-    var total = function () {
-      var sum = 0;
-      sizeInputs.forEach(function (i) { var n = parseInt(i.value, 10); if (n > 0) sum += n; });
-      return sum;
-    };
-    var updateTotal = function () { totalOut.textContent = total(); };
-    sizeInputs.forEach(function (i) { i.addEventListener("input", updateTotal); });
-
-    // Clicking a garment opens the order form with that product selected.
+  // Clicking a garment starts the quote with that product.
+  if (lead) {
+    var details = lead.querySelector("textarea");
+    var serviceSelect = lead.querySelector("select");
     document.querySelectorAll("[data-product]").forEach(function (link) {
       link.addEventListener("click", function () {
-        var wanted = link.getAttribute("data-product");
-        for (var i = 0; i < productSelect.options.length; i++) {
-          if (productSelect.options[i].text === wanted) { productSelect.selectedIndex = i; break; }
+        if (serviceSelect) serviceSelect.selectedIndex = 0;
+        var line = T.product + ": " + link.getAttribute("data-product");
+        if (details && details.value.indexOf(line) === -1) {
+          details.value = line + (details.value ? "\n" + details.value : "\n");
         }
       });
-    });
-
-    setupForm(order, {
-      sent: T.orderSent,
-      validate: function () {
-        return total() > 0 ? null : { message: T.noSizes, focus: sizeInputs[0] };
-      },
-      subject: function () {
-        return T.orderSubject + ": " + val(order, "#o-name") + " - " + val(order, "#o-product") +
-          " - " + total() + " " + T.units + " - " + val(order, "#o-phone");
-      },
-      prepare: function (data) {
-        // Send only the sizes that were ordered, plus the total.
-        totalField.value = String(total());
-        data.set(totalField.name, totalField.value);
-        sizeInputs.forEach(function (i) {
-          if (!(parseInt(i.value, 10) > 0)) data.delete(i.name);
-        });
-      },
-      afterReset: updateTotal
     });
   }
 })();
