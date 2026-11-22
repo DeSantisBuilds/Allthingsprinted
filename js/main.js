@@ -28,17 +28,17 @@
 
   // ----- Hero: one-time three-colour motion -----
   // The cyan, magenta and yellow circles behind the T-shirt drift, orbit and
-  // breathe for 7 seconds, slow down, and land back exactly where the CSS puts
+  // breathe for 12 seconds, slow down, and land back exactly where the CSS puts
   // them. Each motion is a mix of sine waves multiplied by an envelope that is
-  // zero (with zero speed) at 0s and at 7s, so the start and the landing are
-  // seamless. Only transforms change (GPU-friendly, no layout shifts). At 7s
+  // zero (with zero speed) at 0s and at 12s, so the start and the landing are
+  // seamless. Only transforms change (GPU-friendly, no layout shifts). At 12s
   // every inline style is removed, so the hero is the original static design.
   (function heroMotion() {
     var art = document.querySelector(".hero-art");
     if (!art || !window.requestAnimationFrame) return;
     if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    var DURATION = 7000;
+    var DURATION = 12000;
     var TAU = Math.PI * 2;
     // Per circle: orbit around the art's centre (deg), drift (fraction of the
     // art's size) and scale, each as amplitude / frequency (Hz) / phase.

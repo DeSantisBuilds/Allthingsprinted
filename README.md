@@ -7,14 +7,14 @@ A static, single-page website for All Things Printed. It is plain HTML, CSS and 
 | File | What it is |
 |------|------------|
 | `index.html` | All page content (edit text and placeholders here) |
-| `css/styles.css` | Styling. The "Press Proof" theme's brand colours and type are at the top under `:root` |
+| `css/styles.css` | Styling. Brand colours and type are at the top under `:root` |
 | `js/main.js` | Mobile menu, the quote form, and the one-time hero colour animation |
 | `assets/images/` | Put your logo and photos here (`assets/images/gallery/` for gallery photos) |
 | `.nojekyll` | Tells GitHub Pages to serve the files as-is |
 
 ## Look and feel
 
-The design is styled like a printer's proof sheet: process cyan, magenta and yellow with black ink on a cool white page, crop marks around the hero and quote form, a colour bar, and a headline printed in slightly offset inks. Everything uses one typeface, Archivo, with headings set in its expanded width. To change colours or type, edit the tokens under `:root` at the top of `css/styles.css`.
+The design uses the original All Things Printed colours (deep ink navy, warm off-white, process cyan, magenta and yellow) with printer's proof details: crop marks around the hero and quote form, a colour bar, and a headline printed in slightly offset inks. Everything uses one typeface, Archivo, with headings set in its expanded width. To change colours or type, edit the tokens under `:root` at the top of `css/styles.css`.
 
 ## Placeholders to fill in
 

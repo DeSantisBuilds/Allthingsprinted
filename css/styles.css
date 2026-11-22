@@ -1,41 +1,43 @@
 /* =========================================================
    All Things Printed — site styles
 
-   Theme: "Press Proof"
-   The page is styled like a printer's proof sheet: process inks
-   (cyan, magenta, yellow, key) on a cool white sheet, with crop
-   marks, a colour bar and an overprinted headline.
+   Colours: the original All Things Printed scheme (deep ink navy,
+   warm paper, process cyan / magenta / yellow). Layout keeps the
+   proof-sheet details: crop marks, colour bar, overprinted headline.
 
    Brand tokens are defined once below. Change colours and type here,
    and the whole site follows.
    ========================================================= */
 :root {
   /* Process inks */
-  --cyan: #00a0dc;
-  --magenta: #e4007c;
-  --yellow: #ffe100;
-  --key: #17181c;           /* black ink: headings, dark sections */
+  --cyan: #00a3e0;
+  --magenta: #d1006f;
+  --yellow: #ffd400;
+  --key: #14161f;           /* deep ink navy: headings, dark sections */
+  --ink-2: #1e2130;
+  --ink-3: #2a2e40;
 
-  /* Action colour: a deeper magenta so white button text passes WCAG AA */
-  --action: #b8005f;
-  --action-hover: #8f004a;
+  /* Action colour (white text passes WCAG AA) */
+  --action: #d1006f;
+  --action-hover: #a80059;
 
-  /* Paper and press */
-  --paper: #ffffff;         /* the proof sheet */
-  --sheet: #f4f6f8;         /* page background */
-  --press: #e3e8ee;         /* surface the hero sheet sits on */
-  --rule: #cfd5dd;
+  /* Paper */
+  --paper: #ffffff;         /* cards and form */
+  --sheet: #f7f5f0;         /* warm off-white page background */
+  --press: #efece4;         /* alternate section background */
+  --rule: #e2dfd6;
 
   /* Text */
-  --text: #23252c;
-  --muted: #565c6b;
-  --muted-on-dark: #b7bcc8;
+  --text: #1b1d27;
+  --muted: #555a6e;
+  --muted-on-dark: #b9bccb;
 
   /* Type: one family, two widths */
   --font: "Archivo", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
   --wide: 125%;             /* expanded width for headings */
 
-  --radius: 4px;
+  --radius: 14px;
+  --radius-sm: 8px;
   --max: 1180px;
 }
 
@@ -434,3 +436,77 @@ input[aria-invalid="true"], textarea[aria-invalid="true"] { border-color: #c0392
 .site-footer p { margin: 0; }
 .site-footer .brand-name { color: var(--paper); }
 .site-footer .small { font-size: 0.88rem; }
+
+/* =========================================================
+   Original colour scheme: dark header, hero and product rack
+   ========================================================= */
+
+/* Placeholders in the original yellow */
+.placeholder { background: rgba(255, 212, 0, 0.35); outline-color: #b89600; border-radius: 3px; }
+.section-dark .placeholder { background: rgba(255, 212, 0, 0.18); }
+.placeholder-block { border-color: #b89600; background: rgba(255, 212, 0, 0.18); border-radius: var(--radius-sm); }
+
+/* Buttons: rounded, magenta with a soft glow */
+.btn { border-radius: 999px; font-weight: 800; }
+.btn-primary { box-shadow: 0 6px 18px rgba(209, 0, 111, 0.3); }
+
+/* Header */
+.site-header { background: rgba(20, 22, 31, 0.96); border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
+.brand, .brand:hover { color: var(--paper); }
+.brand-mark i { mix-blend-mode: screen; }
+.site-nav a:not(.btn) { color: var(--paper); background-image: linear-gradient(var(--yellow), var(--yellow)); }
+.site-nav a:not(.btn):hover { color: var(--yellow); }
+.nav-toggle-bar, .nav-toggle-bar::before, .nav-toggle-bar::after { background: var(--paper); }
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar { background: transparent; }
+@media (max-width: 900px) {
+  .site-nav { background: var(--key); border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+  .site-nav a:not(.btn) { border-bottom-color: rgba(255, 255, 255, 0.08); }
+}
+
+/* Hero: deep ink with cyan and magenta glows */
+.hero {
+  background:
+    radial-gradient(circle at 85% 20%, rgba(0, 163, 224, 0.25), transparent 40%),
+    radial-gradient(circle at 70% 90%, rgba(209, 0, 111, 0.25), transparent 45%),
+    var(--key);
+  color: var(--paper);
+  overflow: hidden;
+}
+.proof-sheet { background: transparent; }
+.hero .crop { color: rgba(255, 255, 255, 0.55); }
+.op-key { color: var(--paper); mix-blend-mode: normal; }
+.op-layer { mix-blend-mode: screen; }
+.hero .lead { color: var(--muted-on-dark); }
+.hero .btn-outline { color: var(--paper); border-color: rgba(255, 255, 255, 0.55); }
+.hero .btn-outline:hover { background: var(--paper); color: var(--key); border-color: var(--paper); }
+.colour-bar { border-top-color: rgba(255, 255, 255, 0.12); }
+.cb-k { background: #000; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25); }
+.reg-mark { border-color: rgba(255, 255, 255, 0.7); }
+.reg-mark::before, .reg-mark::after { background: rgba(255, 255, 255, 0.7); }
+
+/* T-shirt and circles exactly as in the original hero */
+.swatch { mix-blend-mode: screen; opacity: 0.9; }
+.hero-shirt { filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.45)); }
+.hero-shirt path { fill: #ffffff; stroke: none; }
+
+/* Product rack on dark */
+.section-rack { background: var(--key); color: var(--paper); border: 0; }
+.section-rack h2, .section-rack h3 { color: var(--paper); }
+.section-rack .section-intro { color: var(--muted-on-dark); }
+.products::before { background: #d9dbe3; }
+.product::before { border-color: #d9dbe3; }
+.product svg path { stroke: var(--key); }
+.g-k svg path:not(.detail) { fill: var(--ink-3); }
+.g-k svg path { stroke: #d9dbe3; }
+
+/* Gallery, quote card and form: original rounded, soft look */
+.gallery img { border-radius: var(--radius); padding: 0; }
+.gallery-placeholder { border-radius: var(--radius); border-color: #9a9789; }
+.quote-card { border-radius: var(--radius); border-top: 8px solid var(--magenta); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35); }
+.quote-how { background: #eef8fd; border-radius: 6px; }
+input, select, textarea { border-color: #c9c6bc; border-radius: var(--radius-sm); }
+input:focus, select:focus, textarea:focus { border-color: var(--cyan); outline: 3px solid rgba(0, 163, 224, 0.3); }
+.form-status { border-radius: var(--radius-sm); }
+
+/* Footer */
+.site-footer { background: #0c0d13; border-top: 0; }
