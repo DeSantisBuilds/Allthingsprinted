@@ -28,6 +28,7 @@ Already filled in, in the Contact section and the footer:
 - Instagram: @allthingprinted
 - Hours: Monday to Saturday, 9 a.m. to 5 p.m.
 - Service area: Greater Montreal (also in the About section)
+- Logo: in the header, on the hero T-shirt, in the About section, and as the browser-tab icon. Files are in `assets/images/` (`logo-original.jpg` is the file you supplied).
 
 If any of these change, update every place they appear. For the email, that includes the form's `data-quote-email`.
 
@@ -36,7 +37,6 @@ Still to add when you have them:
 1. **Gallery photos.** Replace each `gallery-placeholder` block with an `<img>` tag. The exact markup is in the comment above the gallery.
 2. **About text** (optional). Add paragraphs to the About section if you want to tell your story.
 3. **Service details** (optional). HTML comments under each service show where to add details like minimums or specific products.
-4. **Logo/favicon** (optional). Instructions are in comments in the `<head>` and header.
 
 ## How the quote form works
 

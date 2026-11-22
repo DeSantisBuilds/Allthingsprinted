@@ -10,9 +10,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
-  <!-- PLACEHOLDER: When you have a logo/favicon, add it to assets/images/ and uncomment:
-  <link rel="icon" href="assets/images/favicon.png">
-  -->
+  <link rel="icon" type="image/png" href="assets/images/favicon.png">
+  <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to main content</a>
@@ -20,9 +19,7 @@
   <header class="site-header">
     <div class="container header-inner">
       <a class="brand" href="#top" aria-label="All Things Printed, back to top">
-        <!-- PLACEHOLDER: To use your logo, replace the two spans below with:
-             <img src="assets/images/logo.png" alt="All Things Printed" height="40"> -->
-        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="brand-logo"><img src="assets/images/logo-mark.png" srcset="assets/images/logo-mark.png 1x, assets/images/logo-mark@2x.png 2x" alt="" width="91" height="48"></span>
         <span class="brand-name">All Things Printed</span>
       </a>
       <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
@@ -66,6 +63,7 @@
               <div class="swatch swatch-y"></div>
               <svg class="hero-shirt" viewBox="0 0 200 200">
                 <path d="M70 22 L44 32 L14 60 L34 86 L50 74 L50 182 L150 182 L150 74 L166 86 L186 60 L156 32 L130 22 C126 36 114 44 100 44 C86 44 74 36 70 22 Z" />
+                <image href="assets/images/logo.jpg" x="62" y="60" width="76" height="47" preserveAspectRatio="xMidYMid meet" />
               </svg>
             </div>
           </div>
@@ -170,7 +168,10 @@
     <!-- ================= ABOUT ================= -->
     <section id="about" class="section" aria-labelledby="about-title">
       <div class="container about">
-        <h2 id="about-title" class="section-title">About All Things Printed</h2>
+        <div class="about-head">
+          <h2 id="about-title" class="section-title">About All Things Printed</h2>
+          <img class="about-logo" src="assets/images/logo.jpg" alt="ATP Inc. All Things Printed logo" width="1137" height="697" loading="lazy">
+        </div>
         <div class="about-copy">
           <p class="about-lede">
             All Things Printed is a custom print business offering DTF apparel printing,
