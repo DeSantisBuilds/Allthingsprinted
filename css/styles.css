@@ -353,3 +353,5 @@ input[aria-invalid="true"], textarea[aria-invalid="true"] { border-color: #c0392
 .site-footer .brand-name { color: var(--white); margin-bottom: 6px; }
 .site-footer p { margin: 0 0 6px; }
 .site-footer .small { font-size: 0.88rem; }
+.site-footer a { color: var(--white); text-decoration-color: rgba(255,255,255,0.4); }
+.site-footer a:hover { color: var(--yellow); }

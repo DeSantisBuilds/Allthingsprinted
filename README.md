@@ -16,16 +16,17 @@ A static, single-page website for All Things Printed. It is plain HTML, CSS and 
 
 Search `index.html` for **`PLACEHOLDER`** and **`EDIT`**. Placeholders show on the page with a yellow dashed highlight until you replace them.
 
-1. **Email.** Replace `you@example.com` and the text `[PLACEHOLDER — your email]` in the Contact section.
-2. **Quote form email.** Set `data-quote-email="you@example.com"` on the `<form id="quote-form">` tag to your real address. Until you change it, the form won't open an email. It tells visitors that online quotes aren't set up yet.
-3. **Phone.** Replace `tel:+10000000000` and the visible text.
-4. **Service area.** This appears in both the About section and the Contact section.
-5. **Hours.** Fill in your hours or delete that line.
-6. **Social links.** Replace `href="#"` with your profile URLs, change the link text (for example, "Facebook"), and remove `class="placeholder"` and `data-placeholder-link`. Delete any links you don't use.
-7. **About text.** Replace the dashed placeholder paragraph with your story.
-8. **Service details** (optional). HTML comments under each service show where to add details like minimums or specific products.
-9. **Logo/favicon** (optional). Instructions are in comments in the `<head>` and header.
-10. **Gallery photos.** Replace each `gallery-placeholder` block with an `<img>` tag. The exact markup is in the comment above the gallery.
+Already filled in: email (info@allthingsprinted.ca, also used by the quote form), phone ((515) 815-1829) and website (www.allthingsprinted.ca). They appear in the Contact section and the footer. If any of them change, update both places and the form's `data-quote-email`.
+
+Still to fill in:
+
+1. **Service area.** This appears in both the About section and the Contact section.
+2. **Hours.** Fill in your hours or delete that line.
+3. **Social links.** Replace `href="#"` with your profile URLs, change the link text (for example, "Facebook"), and remove `class="placeholder"` and `data-placeholder-link`. Delete any links you don't use.
+4. **About text.** Replace the dashed placeholder paragraph with your story.
+5. **Service details** (optional). HTML comments under each service show where to add details like minimums or specific products.
+6. **Logo/favicon** (optional). Instructions are in comments in the `<head>` and header.
+7. **Gallery photos.** Replace each `gallery-placeholder` block with an `<img>` tag. The exact markup is in the comment above the gallery.
 
 Once you replace a placeholder, also remove its `class="placeholder"` so the yellow highlight goes away.
 
