@@ -62,11 +62,13 @@ Run the Worker tests with `npm test` (Node 18 or newer).
 - **If you add analytics**, put the Cloudflare Web Analytics token or Google Analytics ID in `CONFIG` in `js/main.js`. The notice then automatically becomes a real choice (*Tout accepter / Refuser / Personnaliser*), and the analytics script only loads after the visitor accepts.
 - Privacy policy pages: `confidentialite.html` (French) and `en/privacy.html` (English). Have them reviewed, and update them if you add analytics or other services.
 
-## Publishing with GitHub Pages
+## Publishing on Cloudflare (allthingsprinted.ca)
 
-1. Merge this work into your repository's default branch (for example `main`).
-2. On GitHub, open **Settings → Pages**.
-3. Under **Build and deployment**, choose **Deploy from a branch**, select your default branch and `/ (root)`, then save.
-4. Because the repository is named `desantisbuilds.github.io`, the site will be at `https://desantisbuilds.github.io/`.
+The site runs on the Cloudflare Worker `allthingsprinted`, which serves the website and the quote form.
 
-To preview locally, open `index.html` in a browser, or run `python3 -m http.server` in this folder and visit `http://localhost:8000`.
+1. **Connect the repository.** Cloudflare dashboard → *Workers & Pages* → *allthingsprinted* → *Settings* → *Builds* → connect `DeSantisBuilds/desantisbuilds.github.io`, production branch `main`. Every change merged into `main` then deploys automatically. (Alternative: run `npx wrangler deploy` from this folder.)
+2. **Connect the domain.** The domain's DNS must be managed by Cloudflare (*Add a domain* in the dashboard, then change the nameservers at your domain registrar to the two Cloudflare gives you). Then *allthingsprinted* → *Settings* → *Domains & Routes* → *Add* → *Custom domain*: add `allthingsprinted.ca` and `www.allthingsprinted.ca`. Cloudflare creates the HTTPS certificates automatically.
+3. **Before changing nameservers**, check that Cloudflare imported your existing email records (MX, and any TXT records), so info@allthingsprinted.ca keeps working.
+4. Set up the quote form as described in "Online quote form (Cloudflare Turnstile) setup" above.
+
+To preview locally: `npx wrangler dev`, or `python3 -m http.server` (the quote form then stays in email-app mode).
