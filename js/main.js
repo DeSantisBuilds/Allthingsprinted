@@ -112,10 +112,27 @@
   var year = document.getElementById("year");
   if (year) year.textContent = new Date().getFullYear();
 
-  // ----- Placeholder social links: don't jump to top of page -----
-  document.querySelectorAll("[data-placeholder-link]").forEach(function (a) {
-    a.addEventListener("click", function (e) { e.preventDefault(); });
-  });
+  // ----- Language: French is the main page, English lives at /en/ -----
+  var FR = (document.documentElement.lang || "").toLowerCase().indexOf("fr") === 0;
+  var T = FR ? {
+    invalid: "Veuillez indiquer votre nom, un courriel valide et les détails de votre projet.",
+    notSet: "Les demandes de soumission en ligne ne sont pas encore configurées; rien n'a été envoyé. Communiquez avec nous directement.",
+    opened: function (to) { return "Votre application de courriel devrait s'ouvrir avec votre demande. Joignez votre visuel, puis appuyez sur Envoyer. Si rien ne s'est ouvert, écrivez-nous à " + to + "."; },
+    subject: "Demande de soumission",
+    labels: { name: "Nom", email: "Courriel", phone: "Téléphone", service: "Service", product: "Produit",
+      quantity: "Quantité approx.", needed_by: "Date souhaitée", sizes: "Tailles", colours: "Couleurs",
+      locations: "Emplacements d'impression", artwork: "Visuel", details: "Détails du projet" },
+    attach: "(Joignez votre visuel ou votre logo à ce courriel.)"
+  } : {
+    invalid: "Please fill in your name, a valid email, and your project details.",
+    notSet: "Online quote requests aren't set up yet, so nothing was sent. Please contact us directly.",
+    opened: function (to) { return "Your email app should now open with your request filled in. Attach your artwork, then press Send. If nothing opened, email us at " + to + "."; },
+    subject: "Quote request",
+    labels: { name: "Name", email: "Email", phone: "Phone", service: "Service", product: "Product",
+      quantity: "Approx. quantity", needed_by: "Needed by", sizes: "Sizes", colours: "Colours",
+      locations: "Print locations", artwork: "Artwork", details: "Project details" },
+    attach: "(Please attach your artwork or logo to this email.)"
+  };
 
   // ----- Quote form → pre-filled email (no server needed) -----
   var form = document.getElementById("quote-form");
@@ -128,6 +145,27 @@
     status.textContent = message;
   }
 
+  // Garment cards and service links pre-select the matching option in the form.
+  function preselect(selectName, value) {
+    var select = form.elements[selectName];
+    if (!select || !value) return;
+    for (var i = 0; i < select.options.length; i++) {
+      if (select.options[i].text === value || select.options[i].value === value) {
+        select.selectedIndex = i;
+        return;
+      }
+    }
+  }
+  document.querySelectorAll("[data-product], [data-service]").forEach(function (link) {
+    link.addEventListener("click", function () {
+      if (link.dataset.product) {
+        preselect("product", link.dataset.product);
+        preselect("service", form.elements.service.options[0].text);
+      }
+      if (link.dataset.service) preselect("service", link.dataset.service);
+    });
+  });
+
   form.addEventListener("submit", function (e) {
     e.preventDefault();
 
@@ -139,44 +177,50 @@
       if (!ok && !firstInvalid) firstInvalid = el;
     });
     if (firstInvalid) {
-      showStatus("Please fill in your name, a valid email, and your project details.", "error");
+      showStatus(T.invalid, "error");
       firstInvalid.focus();
       return;
     }
 
     var to = (form.getAttribute("data-quote-email") || "").trim();
     if (!to || to === PLACEHOLDER_EMAIL) {
-      showStatus(
-        "Online quote requests aren't set up yet, so nothing was sent. " +
-        "Please contact us directly using the details on this page.",
-        "warning"
-      );
+      showStatus(T.notSet, "warning");
       return;
     }
 
-    var v = function (name) { return (form.elements[name].value || "").trim(); };
+    var v = function (name) {
+      var el = form.elements[name];
+      return el ? (el.value || "").trim() : "";
+    };
+    var locations = Array.prototype.map.call(
+      form.querySelectorAll('input[name="locations"]:checked'),
+      function (box) { return box.value; }
+    ).join(", ");
+    var L = T.labels;
     var lines = [
-      "Name: " + v("name"),
-      "Email: " + v("email"),
-      "Phone: " + (v("phone") || "-"),
-      "Service: " + v("service"),
-      "Product: " + (v("product") || "-"),
-      "Approx. quantity: " + (v("quantity") || "-"),
-      "Needed by: " + (v("needed_by") || "-"),
+      L.name + ": " + v("name"),
+      L.email + ": " + v("email"),
+      L.phone + ": " + (v("phone") || "-"),
+      L.service + ": " + v("service"),
+      L.product + ": " + (v("product") || "-"),
+      L.quantity + ": " + (v("quantity") || "-"),
+      L.needed_by + ": " + (v("needed_by") || "-"),
+      L.sizes + ": " + (v("sizes") || "-"),
+      L.colours + ": " + (v("colours") || "-"),
+      L.locations + ": " + (locations || "-"),
+      L.artwork + ": " + v("artwork"),
       "",
-      "Project details:",
-      v("details")
+      L.details + ":",
+      v("details"),
+      "",
+      T.attach
     ];
-    var subject = "Quote request: " + v("service") + " - " + v("name");
+    var subject = T.subject + ": " + v("service") + " - " + v("name");
     var href = "mailto:" + to +
       "?subject=" + encodeURIComponent(subject) +
       "&body=" + encodeURIComponent(lines.join("\n"));
 
-    showStatus(
-      "Your email app should now open with your request filled in. Remember to press Send there. " +
-      "If nothing opened, email us at " + to + ".",
-      "success"
-    );
+    showStatus(T.opened(to), "success");
     window.location.href = href;
   });
 })();

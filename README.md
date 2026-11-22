@@ -6,41 +6,33 @@ A static, single-page website for All Things Printed. It is plain HTML, CSS and 
 
 | File | What it is |
 |------|------------|
-| `index.html` | All page content (edit text and placeholders here) |
-| `css/styles.css` | Styling. Brand colours and type are at the top under `:root` |
-| `js/main.js` | Mobile menu, the quote form, and the one-time hero colour animation |
-| `assets/images/` | Put your logo and photos here (`assets/images/gallery/` for gallery photos) |
+| `index.html` | **French page (main page)** at `/` |
+| `en/index.html` | English page at `/en/` |
+| `css/styles.css` | Styling. Brand colours are at the top under `:root` |
+| `js/main.js` | Mobile menu, hero animation and the quote form (messages in French or English, based on the page language) |
+| `assets/images/` | Logo files (PNG and WebP), favicon, social sharing image (`og-image.jpg`) |
+| `robots.txt`, `sitemap.xml` | Help search engines find both language versions |
 | `.nojekyll` | Tells GitHub Pages to serve the files as-is |
 
-## Look and feel
+**Any text change must be made in both `index.html` (French) and `en/index.html` (English).**
 
-The design uses the original All Things Printed colours (deep ink navy, warm off-white, process cyan, magenta and yellow) with printer's proof details: crop marks around the hero and quote form, a colour bar, and a headline printed in slightly offset inks. Everything uses one typeface, Archivo, with headings set in its expanded width. To change colours or type, edit the tokens under `:root` at the top of `css/styles.css`.
+## Business details on the site
 
-## Placeholders to fill in
+- Phone: (514) 815-1829 · Email: info@allthingsprinted.ca (also where the quote form sends) · Website: www.allthingsprinted.ca
+- Instagram: @allthingsprinted · Hours: Monday to Saturday, 9 a.m. to 5 p.m. · Service area: Greater Montreal
+- Turnaround 10–15 business days · Vector files print-ready, other files adjusted for a fee · Visual mockups included, sent once the quote is approved · 50% deposit, 50% on completion · Delivery fees may apply
 
-Search `index.html` for **`PLACEHOLDER`** and **`EDIT`**. Placeholders show on the page with a yellow dashed highlight until you replace them.
+These also appear in the structured data (`<script type="application/ld+json">`) in the `<head>` of both pages, which Google reads. Update them there too if they change.
 
-Already filled in, in the Contact section and the footer:
+## Still to add when you have them
 
-- Email: info@allthingsprinted.ca (also where the quote form sends)
-- Phone: (515) 815-1829
-- Website: www.allthingsprinted.ca
-- Instagram: @allthingprinted
-- Hours: Monday to Saturday, 9 a.m. to 5 p.m.
-- Service area: Greater Montreal (also in the About section)
-- Logo: in the header, on the hero T-shirt, in the About section, and as the browser-tab icon. Files are in `assets/images/` (`logo-original.jpg` is the file you supplied).
-
-If any of these change, update every place they appear. For the email, that includes the form's `data-quote-email`.
-
-Still to add when you have them:
-
-1. **Gallery photos.** Replace each `gallery-placeholder` block with an `<img>` tag. The exact markup is in the comment above the gallery.
-2. **About text** (optional). Add paragraphs to the About section if you want to tell your story.
-3. **Service details** (optional). HTML comments under each service show where to add details like minimums or specific products.
+1. **Gallery photos.** The Gallery section is hidden (`hidden` attribute) until real photos exist. Instructions are in the comment above it in both pages.
+2. **Minimum quantities** and any other FAQ answers.
+3. **Specific promotional products** you can confirm.
 
 ## How the quote form works
 
-GitHub Pages can't run a server, so the form does not send anything by itself. When a visitor clicks **Prepare Email**, the form opens their email app with a pre-filled message addressed to you. The visitor then sends it, and can attach artwork first. The page says this clearly next to the form.
+This website has no server, so the form does not send anything by itself. When a visitor clicks **Prepare Email**, the form opens their email app with a pre-filled message addressed to you. The visitor then sends it, and can attach artwork first. The page says this clearly next to the form.
 
 If you'd rather receive submissions without relying on the visitor's email app, you can connect a form service such as Formspree or Basin later. That would need changes to `js/main.js`.
 
