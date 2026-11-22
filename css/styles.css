@@ -515,19 +515,13 @@ input:focus, select:focus, textarea:focus { border-color: var(--cyan); outline: 
 .site-footer a:hover { color: var(--yellow); }
 
 /* ---------- Logo ---------- */
-/* The logo has a white background, so it sits on a white tile in the dark header. */
-.brand-logo {
-  display: inline-flex; align-items: center; flex: none;
-  background: #ffffff; border-radius: 8px; padding: 4px 8px;
-}
-.brand-logo img { display: block; height: 40px; width: auto; }
+/* Transparent PNGs: logo-mark-light (black parts shown in white) for the dark header,
+   logo.png (original colours) for light backgrounds. */
+.brand-logo { display: inline-flex; align-items: center; flex: none; }
+.brand-logo img { display: block; height: 44px; width: auto; }
 @media (max-width: 420px) {
-  .brand-logo img { height: 34px; }
+  .brand-logo img { height: 36px; }
   .brand-name { font-size: 0.95rem; }
 }
 .about-head { display: grid; gap: 24px; align-content: start; }
-.about-logo {
-  width: 100%; max-width: 360px; height: auto;
-  background: #ffffff; border-radius: var(--radius); padding: 16px;
-  box-shadow: 0 10px 30px rgba(20, 22, 31, 0.10);
-}
+.about-logo { width: 100%; max-width: 360px; height: auto; }
