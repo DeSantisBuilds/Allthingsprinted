@@ -8,7 +8,7 @@ A static, single-page website for All Things Printed. It is plain HTML, CSS and 
 |------|------------|
 | `index.html` | All page content (edit text and placeholders here) |
 | `css/styles.css` | Styling. The "Press Proof" theme's brand colours and type are at the top under `:root` |
-| `js/main.js` | Mobile menu and the quote form |
+| `js/main.js` | Mobile menu, the quote form, and the one-time hero colour animation |
 | `assets/images/` | Put your logo and photos here (`assets/images/gallery/` for gallery photos) |
 | `.nojekyll` | Tells GitHub Pages to serve the files as-is |
 
