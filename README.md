@@ -36,7 +36,7 @@ The form sends each lead straight to **info@allthingsprinted.ca** through [FormS
 
 - **Fields:** name, phone, email, service and project details. Clicking a garment adds it to the details.
 - **Email:** a table with all the details. Replying to it replies to the customer.
-- **Text-message alert:** a copy goes to the phone's email-to-text address (`_cc` in the form). The email subject holds the name, phone and service, so the text shows the key facts. Both Bell (`5148151829@txt.bell.ca`) and Virgin Plus (`5148151829@vmobile.ca`) addresses are listed. Keep only the one for your carrier.
+- **Text-message alert:** a copy goes to the Bell email-to-text address `5148151829@txt.bell.ca` (`_cc` in the form), so it arrives as a text on 514 815-1829. The email subject holds the name, phone and service, so the text shows the key facts. If the phone changes carrier, update `_cc` on both pages.
 - **Spam:** a hidden "honeypot" field (`_honey`) blocks most bots.
 
 **One-time activation:** the very first time the form is used on the live site, FormSubmit emails info@allthingsprinted.ca an activation link. Click it, and every lead after that is delivered. FormSubmit then also offers a random alias to use in the form's `action` instead of the email address. Swap it in on both pages to keep the address hidden from spam bots.
