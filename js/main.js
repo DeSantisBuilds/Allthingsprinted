@@ -2,6 +2,16 @@
 (function () {
   "use strict";
 
+  /* ========================================================================
+     SITE SETTINGS — the only part of this file you normally need to edit.
+     ======================================================================== */
+  var CONFIG = {
+    // Optional analytics. Leave empty to use none. When one is set, the cookie
+    // notice asks visitors for consent and loads it only if they accept.
+    cloudflareAnalyticsToken: "",
+    googleAnalyticsId: ""
+  };
+
   document.documentElement.classList.remove("no-js");
 
   // ----- Mobile navigation -----
@@ -112,71 +122,263 @@
   var year = document.getElementById("year");
   if (year) year.textContent = new Date().getFullYear();
 
-  // ----- Placeholder social links: don't jump to top of page -----
-  document.querySelectorAll("[data-placeholder-link]").forEach(function (a) {
-    a.addEventListener("click", function (e) { e.preventDefault(); });
-  });
+  // ----- Language: French is the main page, English lives at /en/ -----
+  var FR = (document.documentElement.lang || "").toLowerCase().indexOf("fr") === 0;
+  var T = FR ? {
+    invalid: "Veuillez indiquer votre nom, votre téléphone, un courriel valide et les détails de votre projet.",
+    sending: "Envoi en cours…",
+    sent: "Merci! Votre demande a bien été envoyée. Nous vous contacterons rapidement.",
+    failed: "La demande n'a pas pu être envoyée. Réessayez, ou appelez-nous au 514 815-1829 ou écrivez à info@allthingsprinted.ca.",
+    subject: "Nouveau lead",
+    product: "Produit",
+    cookie: {
+      region: "Témoins et confidentialité",
+      title: "Témoins et confidentialité",
+      notice: "Ce site n'utilise aucun témoin publicitaire ni de suivi. Il enregistre seulement ce choix dans votre navigateur.",
+      ask: "Ce site n'utilise aucun témoin publicitaire. Avec votre permission, nous utilisons des outils de mesure d'audience pour comprendre comment le site est utilisé.",
+      ok: "J'ai compris", accept: "Tout accepter", refuse: "Refuser", customize: "Personnaliser", save: "Enregistrer mes choix",
+      necessary: "Nécessaires (toujours actifs)", necessaryDesc: "Fonctionnement du site et mémorisation de vos choix.",
+      analytics: "Mesure d'audience", analyticsDesc: "Statistiques de visite pour améliorer le site.",
+      policy: "Politique de confidentialité", policyHref: "confidentialite.html"
+    }
+  } : {
+    invalid: "Please fill in your name, phone, a valid email and your project details.",
+    sending: "Sending…",
+    sent: "Thank you! Your request was sent. We'll contact you shortly.",
+    failed: "Your request couldn't be sent. Please try again, or call (514) 815-1829 or email info@allthingsprinted.ca.",
+    subject: "New lead",
+    product: "Product",
+    cookie: {
+      region: "Cookies and privacy",
+      title: "Cookies and privacy",
+      notice: "This site uses no advertising or tracking cookies. It only stores this choice in your browser.",
+      ask: "This site uses no advertising cookies. With your permission, we use analytics to understand how the site is used.",
+      ok: "Got it", accept: "Accept all", refuse: "Decline", customize: "Customize", save: "Save my choices",
+      necessary: "Necessary (always on)", necessaryDesc: "Site operation and remembering your choices.",
+      analytics: "Analytics", analyticsDesc: "Visit statistics to improve the site.",
+      policy: "Privacy policy", policyHref: "privacy.html"
+    }
+  };
 
-  // ----- Quote form → pre-filled email (no server needed) -----
-  var form = document.getElementById("quote-form");
-  if (!form) return;
-  var status = document.getElementById("quote-status");
-  var PLACEHOLDER_EMAIL = "you@example.com";
+  // ----- Cookie consent (Quebec Law 25: nothing optional runs before consent) -----
+  (function cookieConsent() {
+    var KEY = "atp-consent-v1";
+    var C = T.cookie;
+    var hasAnalytics = !!(CONFIG.cloudflareAnalyticsToken || CONFIG.googleAnalyticsId);
 
-  function showStatus(message, type) {
-    status.className = "form-status is-" + type;
-    status.textContent = message;
+    function read() {
+      try { return JSON.parse(localStorage.getItem(KEY) || "null"); } catch (e) { return null; }
+    }
+    function write(choice) {
+      choice.date = new Date().toISOString();
+      try { localStorage.setItem(KEY, JSON.stringify(choice)); } catch (e) { /* private mode: ask again next visit */ }
+    }
+
+    var analyticsLoaded = false;
+    function loadAnalytics() {
+      if (analyticsLoaded) return;
+      analyticsLoaded = true;
+      if (CONFIG.cloudflareAnalyticsToken) {
+        var cf = document.createElement("script");
+        cf.defer = true;
+        cf.src = "https://static.cloudflareinsights.com/beacon.min.js";
+        cf.setAttribute("data-cf-beacon", JSON.stringify({ token: CONFIG.cloudflareAnalyticsToken }));
+        document.head.appendChild(cf);
+      }
+      if (CONFIG.googleAnalyticsId) {
+        var ga = document.createElement("script");
+        ga.async = true;
+        ga.src = "https://www.googletagmanager.com/gtag/js?id=" + encodeURIComponent(CONFIG.googleAnalyticsId);
+        document.head.appendChild(ga);
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = function () { window.dataLayer.push(arguments); };
+        window.gtag("js", new Date());
+        window.gtag("config", CONFIG.googleAnalyticsId);
+      }
+    }
+
+    var banner = null;
+    function close() { if (banner) { banner.remove(); banner = null; } }
+    function decide(analytics) {
+      write({ analytics: !!analytics });
+      close();
+      if (analytics && hasAnalytics) loadAnalytics();
+      else if (analyticsLoaded) location.reload(); // consent withdrawn: reload without the scripts
+    }
+
+    function button(label, cls, onClick) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "btn btn-sm " + cls;
+      b.textContent = label;
+      b.addEventListener("click", onClick);
+      return b;
+    }
+
+    function open(showDetails) {
+      close();
+      var saved = read();
+      banner = document.createElement("section");
+      banner.className = "cookie-banner";
+      banner.setAttribute("aria-label", C.region);
+      var inner = document.createElement("div");
+      inner.className = "cookie-inner";
+      var h = document.createElement("h2");
+      h.className = "cookie-title";
+      h.textContent = C.title;
+      var p = document.createElement("p");
+      p.textContent = hasAnalytics ? C.ask : C.notice;
+      var link = document.createElement("a");
+      link.href = C.policyHref;
+      link.textContent = C.policy;
+      p.appendChild(document.createTextNode(" "));
+      p.appendChild(link);
+      inner.appendChild(h);
+      inner.appendChild(p);
+
+      var actions = document.createElement("div");
+      actions.className = "cookie-actions";
+      if (!hasAnalytics) {
+        actions.appendChild(button(C.ok, "btn-primary", function () { decide(false); }));
+      } else {
+        var details = document.createElement("div");
+        details.className = "cookie-details";
+        details.hidden = !showDetails;
+        details.innerHTML =
+          '<label class="cookie-option"><input type="checkbox" checked disabled> <span><strong></strong><br><span class="cookie-desc"></span></span></label>' +
+          '<label class="cookie-option"><input type="checkbox" data-analytics> <span><strong></strong><br><span class="cookie-desc"></span></span></label>';
+        var strongs = details.querySelectorAll("strong"), descs = details.querySelectorAll(".cookie-desc");
+        strongs[0].textContent = C.necessary; descs[0].textContent = C.necessaryDesc;
+        strongs[1].textContent = C.analytics; descs[1].textContent = C.analyticsDesc;
+        var box = details.querySelector("[data-analytics]");
+        box.checked = !!(saved && saved.analytics);
+        inner.appendChild(details);
+
+        actions.appendChild(button(C.accept, "btn-primary", function () { decide(true); }));
+        actions.appendChild(button(C.refuse, "btn-outline-light", function () { decide(false); }));
+        var custom = button(showDetails ? C.save : C.customize, "btn-outline-light", function () {
+          if (details.hidden) { details.hidden = false; custom.textContent = C.save; box.focus(); }
+          else decide(box.checked);
+        });
+        actions.appendChild(custom);
+      }
+      inner.appendChild(actions);
+      banner.appendChild(inner);
+      document.body.appendChild(banner);
+      return banner;
+    }
+
+    document.querySelectorAll("[data-cookie-settings]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var el = open(true);
+        var first = el.querySelector("input:not([disabled]), button");
+        if (first) first.focus();
+      });
+    });
+
+    var saved = read();
+    if (!saved) open(false);
+    else if (saved.analytics && hasAnalytics) loadAnalytics();
+  })();
+
+  // ----- Forms: sent straight to the business email by FormSubmit -----
+  // Each form's "action" is the FormSubmit address. With JavaScript we send it in
+  // the background (FormSubmit's /ajax/ address) and show a message on the page;
+  // without JavaScript the browser posts it normally.
+  function setupForm(form, opts) {
+    var status = form.querySelector("[data-status]") || document.getElementById("form-status");
+    var submitBtn = form.querySelector('button[type="submit"]');
+
+    function showStatus(message, type) {
+      status.className = "form-status is-" + type;
+      status.textContent = message;
+    }
+
+    // Clear an error message as soon as the visitor edits the form again.
+    form.addEventListener("input", function () {
+      if (status.classList.contains("is-error")) { status.className = "form-status"; status.textContent = ""; }
+    });
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var firstInvalid = null;
+      form.querySelectorAll("[required]").forEach(function (el) {
+        var ok = el.value.trim() !== "" && el.checkValidity();
+        el.setAttribute("aria-invalid", ok ? "false" : "true");
+        if (!ok && !firstInvalid) firstInvalid = el;
+      });
+      if (firstInvalid) {
+        showStatus(T.invalid, "error");
+        firstInvalid.focus();
+        return;
+      }
+      if (opts.validate) {
+        var problem = opts.validate();
+        if (problem) { showStatus(problem.message, "error"); if (problem.focus) problem.focus.focus(); return; }
+      }
+
+      // The subject carries the key facts (it is what shows in a text-message alert).
+      form.querySelector('input[name="_subject"]').value = opts.subject();
+      var data = new FormData(form);
+      if (opts.prepare) opts.prepare(data);
+
+      var label = submitBtn.textContent;
+      submitBtn.disabled = true;
+      submitBtn.textContent = T.sending;
+      showStatus(T.sending, "info");
+
+      fetch(form.action.replace("formsubmit.co/", "formsubmit.co/ajax/"), {
+        method: "POST",
+        headers: { "Accept": "application/json" },
+        body: data
+      })
+        .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { ok: r.ok, body: j }; }); })
+        .then(function (res) {
+          var success = res.ok && res.body && (res.body.success === true || res.body.success === "true");
+          if (success) {
+            form.reset();
+            if (opts.afterReset) opts.afterReset();
+            showStatus(opts.sent, "success");
+          } else {
+            showStatus(T.failed, "error");
+          }
+        })
+        .catch(function () { showStatus(T.failed, "error"); })
+        .then(function () {
+          submitBtn.disabled = false;
+          submitBtn.textContent = label;
+        });
+    });
   }
 
-  form.addEventListener("submit", function (e) {
-    e.preventDefault();
+  function val(form, selector) {
+    var el = form.querySelector(selector);
+    return el ? el.value.trim() : "";
+  }
 
-    // Basic validation
-    var firstInvalid = null;
-    form.querySelectorAll("[required]").forEach(function (el) {
-      var ok = el.value.trim() !== "" && el.checkValidity();
-      el.setAttribute("aria-invalid", ok ? "false" : "true");
-      if (!ok && !firstInvalid) firstInvalid = el;
+  // Quote / lead form
+  var lead = document.getElementById("lead-form");
+  if (lead) {
+    setupForm(lead, {
+      sent: T.sent,
+      subject: function () {
+        return T.subject + ": " + val(lead, "#q-name") + " - " + val(lead, "#q-phone") + " - " + val(lead, "select");
+      }
     });
-    if (firstInvalid) {
-      showStatus("Please fill in your name, a valid email, and your project details.", "error");
-      firstInvalid.focus();
-      return;
-    }
+  }
 
-    var to = (form.getAttribute("data-quote-email") || "").trim();
-    if (!to || to === PLACEHOLDER_EMAIL) {
-      showStatus(
-        "Online quote requests aren't set up yet, so nothing was sent. " +
-        "Please contact us directly using the details on this page.",
-        "warning"
-      );
-      return;
-    }
-
-    var v = function (name) { return (form.elements[name].value || "").trim(); };
-    var lines = [
-      "Name: " + v("name"),
-      "Email: " + v("email"),
-      "Phone: " + (v("phone") || "-"),
-      "Service: " + v("service"),
-      "Product: " + (v("product") || "-"),
-      "Approx. quantity: " + (v("quantity") || "-"),
-      "Needed by: " + (v("needed_by") || "-"),
-      "",
-      "Project details:",
-      v("details")
-    ];
-    var subject = "Quote request: " + v("service") + " - " + v("name");
-    var href = "mailto:" + to +
-      "?subject=" + encodeURIComponent(subject) +
-      "&body=" + encodeURIComponent(lines.join("\n"));
-
-    showStatus(
-      "Your email app should now open with your request filled in. Remember to press Send there. " +
-      "If nothing opened, email us at " + to + ".",
-      "success"
-    );
-    window.location.href = href;
-  });
+  // Clicking a garment starts the quote with that product.
+  if (lead) {
+    var details = lead.querySelector("textarea");
+    var serviceSelect = lead.querySelector("select");
+    document.querySelectorAll("[data-product]").forEach(function (link) {
+      link.addEventListener("click", function () {
+        if (serviceSelect) serviceSelect.selectedIndex = 0;
+        var line = T.product + ": " + link.getAttribute("data-product");
+        if (details && details.value.indexOf(line) === -1) {
+          details.value = line + (details.value ? "\n" + details.value : "\n");
+        }
+      });
+    });
+  }
 })();

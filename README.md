@@ -1,49 +1,67 @@
 # All Things Printed — website
 
-A static, single-page website for All Things Printed. It is plain HTML, CSS and JavaScript with no build step, so GitHub Pages can publish it as-is.
+A simple static website for All Things Printed: plain HTML, CSS and a little JavaScript, no build step. French is the main page; English is at `/en/`.
 
 ## Files
 
 | File | What it is |
 |------|------------|
-| `index.html` | All page content (edit text and placeholders here) |
-| `css/styles.css` | Styling. Brand colours and type are at the top under `:root` |
-| `js/main.js` | Mobile menu, the quote form, and the one-time hero colour animation |
-| `assets/images/` | Put your logo and photos here (`assets/images/gallery/` for gallery photos) |
-| `.nojekyll` | Tells GitHub Pages to serve the files as-is |
+| `index.html` | **French page (main page)** at `/` |
+| `en/index.html` | English page at `/en/` |
+| `confidentialite.html`, `en/privacy.html` | Privacy policy (French, English) |
+| `css/styles.css` | Styling. Brand colours are at the top under `:root` |
+| `js/main.js` | Mobile menu, hero animation, cookie notice and the lead form |
+| `assets/images/` | Logo files (PNG and WebP), favicon, social sharing image (`og-image.jpg`) |
+| `assets/fonts/` | Self-hosted Archivo font (open licence in `OFL.txt`) |
+| `robots.txt`, `sitemap.xml` | Help search engines find both language versions |
+| `wrangler.toml`, `.assetsignore` | Publishing on Cloudflare (see below) |
 
-## Look and feel
+**Any text change must be made in both `index.html` (French) and `en/index.html` (English).**
 
-The design uses the original All Things Printed colours (deep ink navy, warm off-white, process cyan, magenta and yellow) with printer's proof details: crop marks around the hero and quote form, a colour bar, and a headline printed in slightly offset inks. Everything uses one typeface, Archivo, with headings set in its expanded width. To change colours or type, edit the tokens under `:root` at the top of `css/styles.css`.
+## Page sections
 
-## Placeholders to fill in
+Hero (T-shirt with a "( VOTRE LOGO ICI )" print area) → Services → Garments → About → FAQ → Contact and quote form.
 
-Search `index.html` for **`PLACEHOLDER`** and **`EDIT`**. Placeholders show on the page with a yellow dashed highlight until you replace them.
+## Business details on the site
 
-1. **Email.** Replace `you@example.com` and the text `[PLACEHOLDER — your email]` in the Contact section.
-2. **Quote form email.** Set `data-quote-email="you@example.com"` on the `<form id="quote-form">` tag to your real address. Until you change it, the form won't open an email. It tells visitors that online quotes aren't set up yet.
-3. **Phone.** Replace `tel:+10000000000` and the visible text.
-4. **Service area.** This appears in both the About section and the Contact section.
-5. **Hours.** Fill in your hours or delete that line.
-6. **Social links.** Replace `href="#"` with your profile URLs, change the link text (for example, "Facebook"), and remove `class="placeholder"` and `data-placeholder-link`. Delete any links you don't use.
-7. **About text.** Replace the dashed placeholder paragraph with your story.
-8. **Service details** (optional). HTML comments under each service show where to add details like minimums or specific products.
-9. **Logo/favicon** (optional). Instructions are in comments in the `<head>` and header.
-10. **Gallery photos.** Replace each `gallery-placeholder` block with an `<img>` tag. The exact markup is in the comment above the gallery.
+- Phone: (514) 815-1829 · Email: info@allthingsprinted.ca · Website: www.allthingsprinted.ca
+- Instagram: @allthingsprintedinc · Hours: Monday to Saturday, 9 a.m. to 5 p.m. · Service area: Greater Montreal
+- FAQ: turnaround 10–15 business days · vector files print-ready, other files adjusted for a fee · visual mockup included, sent once the quote is approved · 50% deposit, 50% on completion · delivery fees may apply
 
-Once you replace a placeholder, also remove its `class="placeholder"` so the yellow highlight goes away.
+These also appear in the structured data (`<script type="application/ld+json">`) in the `<head>` of both pages. Update them there too if they change.
 
-## How the quote form works
+## Lead form
 
-GitHub Pages can't run a server, so the form does not send anything by itself. When a visitor clicks **Prepare Email**, the form opens their email app with a pre-filled message addressed to you. The visitor then sends it, and can attach artwork first. The page says this clearly next to the form.
+The form sends each lead straight to **info@allthingsprinted.ca** through [FormSubmit](https://formsubmit.co) (free, no account). The visitor stays on the page and sees a confirmation.
 
-If you'd rather receive submissions without relying on the visitor's email app, you can connect a form service such as Formspree or Basin later. That would need changes to `js/main.js`.
+- **Fields:** name, phone, email, service and project details. Clicking a garment adds it to the details.
+- **Email:** a table with all the details. Replying to it replies to the customer.
+- **Text-message alert:** a copy goes to the Bell email-to-text address `5148151829@txt.bell.ca` (`_cc` in the form), so it arrives as a text on 514 815-1829. The email subject holds the name, phone and service, so the text shows the key facts. If the phone changes carrier, update `_cc` on both pages.
+- **Spam:** a hidden "honeypot" field (`_honey`) blocks most bots.
 
-## Publishing with GitHub Pages
+**One-time activation:** the very first time the form is used on the live site, FormSubmit emails info@allthingsprinted.ca an activation link. Click it, and every lead after that is delivered. FormSubmit then also offers a random alias to use in the form's `action` instead of the email address. Swap it in on both pages to keep the address hidden from spam bots.
 
-1. Merge this work into your repository's default branch (for example `main`).
-2. On GitHub, open **Settings → Pages**.
-3. Under **Build and deployment**, choose **Deploy from a branch**, select your default branch and `/ (root)`, then save.
-4. Because the repository is named `desantisbuilds.github.io`, the site will be at `https://desantisbuilds.github.io/`.
+To change where leads go, edit the form's `action` (email) and `_cc` (text alert) in **both** `index.html` and `en/index.html`.
 
-To preview locally, open `index.html` in a browser, or run `python3 -m http.server` in this folder and visit `http://localhost:8000`.
+## Cookies and privacy
+
+- The site sets **no advertising or tracking cookies** and loads nothing from Google (the font is self-hosted).
+- A small notice appears on the first visit. Visitors can reopen it with *Paramètres des témoins / Cookie settings* in the footer.
+- **If you add analytics**, put the Cloudflare Web Analytics token or Google Analytics ID in `CONFIG` at the top of `js/main.js`. The notice then becomes a real choice (*Tout accepter / Refuser / Personnaliser*), and analytics only load after the visitor accepts. Update the privacy policy too.
+- Have the privacy policy pages reviewed before launch.
+
+## Still to add when you have them
+
+- **Photos** of completed work (a gallery section can be added).
+- **Minimum quantities** and any other FAQ answers.
+
+## Publishing on Cloudflare (allthingsprinted.ca)
+
+The site is published by the Cloudflare Worker `allthingsprinted`, which serves these files.
+
+1. **Connect the repository.** Cloudflare dashboard → *Workers & Pages* → *allthingsprinted* → *Settings* → *Builds* → connect this GitHub repository, production branch `main`. Every change merged into `main` then deploys automatically. (Alternative: run `npx wrangler deploy` from this folder.)
+2. **Connect the domain.** The domain's DNS must be managed by Cloudflare (*Add a domain*, then change the nameservers at your registrar to the two Cloudflare gives you). Then *allthingsprinted* → *Settings* → *Domains & Routes* → *Add* → *Custom domain*: add `allthingsprinted.ca` and `www.allthingsprinted.ca`. HTTPS certificates are created automatically.
+3. **Before changing nameservers**, check that Cloudflare imported your existing email records (MX and TXT), so info@allthingsprinted.ca keeps working.
+4. Send one test lead from the live site and click FormSubmit's activation email (see "Lead form").
+
+To preview locally, run `python3 -m http.server` in this folder and visit `http://localhost:8000`.

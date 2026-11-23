@@ -1,0 +1,8 @@
+# Cloudflare Worker for allthingsprinted.ca: serves the website files.
+# Publishing steps are in README.md under "Publishing on Cloudflare".
+name = "allthingsprinted"
+compatibility_date = "2025-09-01"
+
+# The website files. Files listed in .assetsignore are not published.
+[assets]
+directory = "./"
