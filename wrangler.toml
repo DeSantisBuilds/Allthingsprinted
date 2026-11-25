@@ -1,8 +1,12 @@
 # Cloudflare Worker for allthingsprinted.ca: serves the website files.
-# Publishing steps are in README.md under "Publishing on Cloudflare".
+# Publishing steps are in docs/domain-migration-checklist.md.
 name = "allthingsprinted"
 compatibility_date = "2025-09-01"
 
 # The website files. Files listed in .assetsignore are not published.
+# Clean URLs: /services/broderie/ serves services/broderie/index.html,
+# /confidentialite serves confidentialite.html. Unknown paths get 404.html.
 [assets]
 directory = "./"
+html_handling = "auto-trailing-slash"
+not_found_handling = "404-page"

@@ -128,6 +128,7 @@
     invalid: "Veuillez indiquer votre nom, votre téléphone, un courriel valide et les détails de votre projet.",
     sending: "Envoi en cours…",
     sent: "Merci! Votre demande a bien été envoyée. Nous vous contacterons rapidement.",
+    preview: "Aperçu seulement : ce formulaire n'envoie rien dans l'aperçu de développement.",
     failed: "La demande n'a pas pu être envoyée. Réessayez, ou appelez-nous au 514 815-1829 ou écrivez à info@allthingsprinted.ca.",
     subject: "Nouveau lead",
     product: "Produit",
@@ -145,6 +146,7 @@
     invalid: "Please fill in your name, phone, a valid email and your project details.",
     sending: "Sending…",
     sent: "Thank you! Your request was sent. We'll contact you shortly.",
+    preview: "Preview only: this form sends nothing in the development preview.",
     failed: "Your request couldn't be sent. Please try again, or call (514) 815-1829 or email info@allthingsprinted.ca.",
     subject: "New lead",
     product: "Product",
@@ -223,13 +225,14 @@
       banner.setAttribute("aria-label", C.region);
       var inner = document.createElement("div");
       inner.className = "cookie-inner";
-      var h = document.createElement("h2");
+      var h = document.createElement("p");
       h.className = "cookie-title";
       h.textContent = C.title;
       var p = document.createElement("p");
       p.textContent = hasAnalytics ? C.ask : C.notice;
       var link = document.createElement("a");
-      link.href = C.policyHref;
+      var footerPolicy = document.querySelector("[data-policy-link]");
+      link.href = footerPolicy ? footerPolicy.getAttribute("href") : C.policyHref;
       link.textContent = C.policy;
       p.appendChild(document.createTextNode(" "));
       p.appendChild(link);
@@ -317,6 +320,9 @@
         if (problem) { showStatus(problem.message, "error"); if (problem.focus) problem.focus.focus(); return; }
       }
 
+      // Development preview: never send anything.
+      if (form.getAttribute("data-preview") === "true") { showStatus(T.preview, "info"); return; }
+
       // The subject carries the key facts (it is what shows in a text-message alert).
       form.querySelector('input[name="_subject"]').value = opts.subject();
       var data = new FormData(form);
@@ -359,24 +365,39 @@
   // Quote / lead form
   var lead = document.getElementById("lead-form");
   if (lead) {
+    var serviceSelect = lead.querySelector("#q-service");
+    var details = lead.querySelector("#q-details");
+
+    var requestType = function () {
+      var checked = lead.querySelector('.segmented input:checked');
+      return checked ? checked.value : "";
+    };
+
     setupForm(lead, {
       sent: T.sent,
       subject: function () {
-        return T.subject + ": " + val(lead, "#q-name") + " - " + val(lead, "#q-phone") + " - " + val(lead, "select");
+        var type = requestType();
+        var isReorder = lead.querySelector('.segmented input:checked') !== lead.querySelector('.segmented input');
+        return T.subject + ": " + val(lead, "#q-name") + " - " + val(lead, "#q-phone") + " - " +
+          (serviceSelect ? serviceSelect.value : "") + (isReorder ? " - " + type : "");
       }
     });
-  }
 
-  // Clicking a garment starts the quote with that product.
-  if (lead) {
-    var details = lead.querySelector("textarea");
-    var serviceSelect = lead.querySelector("select");
-    document.querySelectorAll("[data-product]").forEach(function (link) {
+    // Buttons and cards that name a service pre-select it in the form;
+    // garments also add "Product: …" to the project details.
+    var selectService = function (key) {
+      if (!serviceSelect || !key) return;
+      for (var i = 0; i < serviceSelect.options.length; i++) {
+        if (serviceSelect.options[i].getAttribute("data-key") === key) { serviceSelect.selectedIndex = i; return; }
+      }
+    };
+    document.querySelectorAll("[data-service]").forEach(function (link) {
       link.addEventListener("click", function () {
-        if (serviceSelect) serviceSelect.selectedIndex = 0;
-        var line = T.product + ": " + link.getAttribute("data-product");
-        if (details && details.value.indexOf(line) === -1) {
-          details.value = line + (details.value ? "\n" + details.value : "\n");
+        selectService(link.getAttribute("data-service"));
+        var product = link.getAttribute("data-product");
+        if (product && details) {
+          var line = T.product + ": " + product;
+          if (details.value.indexOf(line) === -1) details.value = line + (details.value ? "\n" + details.value : "\n");
         }
       });
     });

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.allthingsprinted.ca/sitemap.xml
+Sitemap: https://allthingsprinted.ca/sitemap.xml

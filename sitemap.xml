@@ -1,25 +1,123 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://www.allthingsprinted.ca/</loc>
-    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://www.allthingsprinted.ca/"/>
-    <xhtml:link rel="alternate" hreflang="en-CA" href="https://www.allthingsprinted.ca/en/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.allthingsprinted.ca/"/>
+    <loc>https://allthingsprinted.ca/</loc>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://allthingsprinted.ca/"/>
+    <xhtml:link rel="alternate" hreflang="en-CA" href="https://allthingsprinted.ca/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://allthingsprinted.ca/"/>
   </url>
   <url>
-    <loc>https://www.allthingsprinted.ca/en/</loc>
-    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://www.allthingsprinted.ca/"/>
-    <xhtml:link rel="alternate" hreflang="en-CA" href="https://www.allthingsprinted.ca/en/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.allthingsprinted.ca/"/>
+    <loc>https://allthingsprinted.ca/en/</loc>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://allthingsprinted.ca/"/>
+    <xhtml:link rel="alternate" hreflang="en-CA" href="https://allthingsprinted.ca/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://allthingsprinted.ca/"/>
   </url>
   <url>
-    <loc>https://www.allthingsprinted.ca/confidentialite.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://www.allthingsprinted.ca/confidentialite.html"/>
-    <xhtml:link rel="alternate" hreflang="en-CA" href="https://www.allthingsprinted.ca/en/privacy.html"/>
+    <loc>https://allthingsprinted.ca/services/vetements-personnalises/</loc>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://allthingsprinted.ca/services/vetements-personnalises/"/>
+    <xhtml:link rel="alternate" hreflang="en-CA" href="https://allthingsprinted.ca/en/services/custom-apparel/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://allthingsprinted.ca/services/vetements-personnalises/"/>
   </url>
   <url>
-    <loc>https://www.allthingsprinted.ca/en/privacy.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://www.allthingsprinted.ca/confidentialite.html"/>
-    <xhtml:link rel="alternate" hreflang="en-CA" href="https://www.allthingsprinted.ca/en/privacy.html"/>
+    <loc>https://allthingsprinted.ca/en/services/custom-apparel/</loc>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://allthingsprinted.ca/services/vetements-personnalises/"/>
+    <xhtml:link rel="alternate" hreflang="en-CA" href="https://allthingsprinted.ca/en/services/custom-apparel/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://allthingsprinted.ca/services/vetements-personnalises/"/>
+  </url>
+  <url>
+    <loc>https://allthingsprinted.ca/services/impression-dtf/</loc>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://allthingsprinted.ca/services/impression-dtf/"/>
+    <xhtml:link rel="alternate" hreflang="en-CA" href="https://allthingsprinted.ca/en/services/dtf-printing/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://allthingsprinted.ca/services/impression-dtf/"/>
+  </url>
+  <url>
+    <loc>https://allthingsprinted.ca/en/services/dtf-printing/</loc>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://allthingsprinted.ca/services/impression-dtf/"/>
+    <xhtml:link rel="alternate" hreflang="en-CA" href="https://allthingsprinted.ca/en/services/dtf-printing/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://allthingsprinted.ca/services/impression-dtf/"/>
+  </url>
+  <url>
+    <loc>https://allthingsprinted.ca/services/broderie/</loc>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://allthingsprinted.ca/services/broderie/"/>
+    <xhtml:link rel="alternate" hreflang="en-CA" href="https://allthingsprinted.ca/en/services/embroidery/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://allthingsprinted.ca/services/broderie/"/>
+  </url>
+  <url>
+    <loc>https://allthingsprinted.ca/en/services/embroidery/</loc>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://allthingsprinted.ca/services/broderie/"/>
+    <xhtml:link rel="alternate" hreflang="en-CA" href="https://allthingsprinted.ca/en/services/embroidery/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://allthingsprinted.ca/services/broderie/"/>
+  </url>
+  <url>
+    <loc>https://allthingsprinted.ca/services/lettrage-vinyle/</loc>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://allthingsprinted.ca/services/lettrage-vinyle/"/>
+    <xhtml:link rel="alternate" hreflang="en-CA" href="https://allthingsprinted.ca/en/services/vinyl-lettering/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://allthingsprinted.ca/services/lettrage-vinyle/"/>
+  </url>
+  <url>
+    <loc>https://allthingsprinted.ca/en/services/vinyl-lettering/</loc>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://allthingsprinted.ca/services/lettrage-vinyle/"/>
+    <xhtml:link rel="alternate" hreflang="en-CA" href="https://allthingsprinted.ca/en/services/vinyl-lettering/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://allthingsprinted.ca/services/lettrage-vinyle/"/>
+  </url>
+  <url>
+    <loc>https://allthingsprinted.ca/services/enseignes/</loc>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://allthingsprinted.ca/services/enseignes/"/>
+    <xhtml:link rel="alternate" hreflang="en-CA" href="https://allthingsprinted.ca/en/services/signage/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://allthingsprinted.ca/services/enseignes/"/>
+  </url>
+  <url>
+    <loc>https://allthingsprinted.ca/en/services/signage/</loc>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://allthingsprinted.ca/services/enseignes/"/>
+    <xhtml:link rel="alternate" hreflang="en-CA" href="https://allthingsprinted.ca/en/services/signage/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://allthingsprinted.ca/services/enseignes/"/>
+  </url>
+  <url>
+    <loc>https://allthingsprinted.ca/services/produits-promotionnels/</loc>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://allthingsprinted.ca/services/produits-promotionnels/"/>
+    <xhtml:link rel="alternate" hreflang="en-CA" href="https://allthingsprinted.ca/en/services/promotional-products/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://allthingsprinted.ca/services/produits-promotionnels/"/>
+  </url>
+  <url>
+    <loc>https://allthingsprinted.ca/en/services/promotional-products/</loc>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://allthingsprinted.ca/services/produits-promotionnels/"/>
+    <xhtml:link rel="alternate" hreflang="en-CA" href="https://allthingsprinted.ca/en/services/promotional-products/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://allthingsprinted.ca/services/produits-promotionnels/"/>
+  </url>
+  <url>
+    <loc>https://allthingsprinted.ca/services/impression-evenements/</loc>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://allthingsprinted.ca/services/impression-evenements/"/>
+    <xhtml:link rel="alternate" hreflang="en-CA" href="https://allthingsprinted.ca/en/services/event-printing/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://allthingsprinted.ca/services/impression-evenements/"/>
+  </url>
+  <url>
+    <loc>https://allthingsprinted.ca/en/services/event-printing/</loc>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://allthingsprinted.ca/services/impression-evenements/"/>
+    <xhtml:link rel="alternate" hreflang="en-CA" href="https://allthingsprinted.ca/en/services/event-printing/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://allthingsprinted.ca/services/impression-evenements/"/>
+  </url>
+  <url>
+    <loc>https://allthingsprinted.ca/services/conception-graphique/</loc>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://allthingsprinted.ca/services/conception-graphique/"/>
+    <xhtml:link rel="alternate" hreflang="en-CA" href="https://allthingsprinted.ca/en/services/graphic-design/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://allthingsprinted.ca/services/conception-graphique/"/>
+  </url>
+  <url>
+    <loc>https://allthingsprinted.ca/en/services/graphic-design/</loc>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://allthingsprinted.ca/services/conception-graphique/"/>
+    <xhtml:link rel="alternate" hreflang="en-CA" href="https://allthingsprinted.ca/en/services/graphic-design/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://allthingsprinted.ca/services/conception-graphique/"/>
+  </url>
+  <url>
+    <loc>https://allthingsprinted.ca/confidentialite</loc>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://allthingsprinted.ca/confidentialite"/>
+    <xhtml:link rel="alternate" hreflang="en-CA" href="https://allthingsprinted.ca/en/privacy"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://allthingsprinted.ca/confidentialite"/>
+  </url>
+  <url>
+    <loc>https://allthingsprinted.ca/en/privacy</loc>
+    <xhtml:link rel="alternate" hreflang="fr-CA" href="https://allthingsprinted.ca/confidentialite"/>
+    <xhtml:link rel="alternate" hreflang="en-CA" href="https://allthingsprinted.ca/en/privacy"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://allthingsprinted.ca/confidentialite"/>
   </url>
 </urlset>
