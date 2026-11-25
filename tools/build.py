@@ -90,7 +90,7 @@ VERSIONS = {}
 
 
 def fingerprint():
-    for rel in ["css/styles.css", "js/main.js", "assets/images/logo.webp", "assets/images/logo.png",
+    for rel in ["css/styles.css", "css/nojs.css", "js/main.js", "assets/images/logo.webp", "assets/images/logo.png",
                 "assets/images/logo-mark-light.webp", "assets/images/logo-mark-light-2x.webp",
                 "assets/images/logo-mark-light.png", "assets/images/logo-mark-light-2x.png",
                 "assets/images/favicon.png", "assets/images/apple-touch-icon.png", "assets/images/og-image.jpg",
@@ -224,6 +224,7 @@ def head(ctx, title, desc, pid, extra_ld=None, noindex=False):
   <meta name="twitter:card" content="summary_large_image">
   <link rel="preload" href="%(font)s" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="%(css)s">
+  <noscript><link rel="stylesheet" href="%(nojs)s"></noscript>
   <link rel="icon" type="image/png" href="%(fav)s">
   <link rel="apple-touch-icon" href="%(touch)s">
 %(ld)s</head>
@@ -231,7 +232,7 @@ def head(ctx, title, desc, pid, extra_ld=None, noindex=False):
         "hl": "fr-CA" if lang == "fr" else "en-CA", "title": esc(title), "desc": esc(desc), "robots": robots,
         "canon": canon, "alts": alts, "ogl": "fr_CA" if lang == "fr" else "en_CA", "ogl2": "en_CA" if lang == "fr" else "fr_CA",
         "ogurl": og_url, "ogimg": C.SITE["domain"] + "/assets/images/og-image.jpg",
-        "font": ctx.asset_plain("assets/fonts/archivo-latin-wdth-normal.woff2"), "css": ctx.asset("css/styles.css"),
+        "font": ctx.asset_plain("assets/fonts/archivo-latin-wdth-normal.woff2"), "css": ctx.asset("css/styles.css"), "nojs": ctx.asset("css/nojs.css"),
         "fav": ctx.asset("assets/images/favicon.png"), "touch": ctx.asset("assets/images/apple-touch-icon.png"), "ld": ld,
     }
 
